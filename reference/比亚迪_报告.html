@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>比亚迪（002594）深度研究报告 · 可溯源版</title>
+<style>
+:root{
+  --navy:#0b1f3a; --ink:#172236; --muted:#667085; --line:#dce4ef;
+  --brand:#1559c7; --brand-soft:#e8f0ff;
+  --policy:#0c9b78; --policy-soft:#e2f6ef;
+  --std:#b26a00; --std-soft:#fff4e0;
+  --fin:#6d3cc7; --fin-soft:#f1ebfd;
+  --warn:#b93939;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+  color:var(--ink);background:#f4f7fb;line-height:1.7;font-size:14.5px}
+a{color:var(--brand)}
+.topbar{position:sticky;top:0;z-index:10;display:flex;justify-content:space-between;align-items:center;
+  padding:10px 22px;background:var(--navy);color:#fff;font-size:13px}
+.topbar .tags span{display:inline-block;margin-left:6px;padding:2px 10px;border:1px solid rgba(255,255,255,.3);
+  border-radius:999px;font-size:11.5px}
+.layout{display:grid;grid-template-columns:minmax(0,760px) minmax(340px,420px);gap:26px;
+  max-width:1240px;margin:0 auto;padding:26px 18px 60px}
+/* 左栏 报告 */
+.report{min-width:0}
+.r-head{padding:22px 26px;background:#fff;border:1px solid var(--line);border-radius:12px;margin-bottom:16px}
+.r-head h1{margin:0 0 6px;font-size:22px;color:var(--navy)}
+.r-head .sub{color:var(--muted);font-size:13px}
+.section{background:#fff;border:1px solid var(--line);border-radius:12px;padding:20px 24px;margin-bottom:16px}
+.section h2{margin:0 0 4px;font-size:16.5px;color:var(--navy);display:flex;align-items:center;gap:8px}
+.section h2 .no{display:inline-flex;width:24px;height:24px;border-radius:6px;background:var(--brand);
+  color:#fff;align-items:center;justify-content:center;font-size:13px}
+.section .lead{margin:0 0 12px;font-size:12.5px;color:var(--muted)}
+.src-badge{display:inline-flex;align-items:center;gap:2px;font-size:11.5px;color:var(--fin);
+  background:var(--fin-soft);border-radius:6px;padding:2px 8px}
+.kv-table{width:100%;border-collapse:collapse;font-size:13px}
+.kv-table th,.kv-table td{border:1px solid var(--line);padding:7px 10px;text-align:left}
+.kv-table th{background:#f2f5fb;width:130px;color:var(--navy)}
+.biz{margin-top:10px;padding:10px 12px;background:#f8faff;border-radius:8px}
+.biz .label{font-size:11.5px;color:var(--brand);font-weight:700}
+.biz p{margin:4px 0 0;font-size:13px}
+.data-table{width:100%;border-collapse:collapse;font-size:12.5px}
+.data-table th,.data-table td{border:1px solid var(--line);padding:7px 9px;text-align:left;white-space:nowrap}
+.data-table th{background:#f2f5fb;color:var(--navy)}
+.data-table.compact th,.data-table.compact td{padding:5px 8px}
+.rank-card{border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-bottom:10px;background:#fbfcfe}
+.rank-head{display:flex;justify-content:space-between;align-items:center}
+.rank-name{font-weight:700;color:var(--navy);font-size:13.5px}
+.rank-pos{font-family:monospace;font-weight:800;color:var(--brand);font-size:15px}
+.rank-meta{font-size:12px;color:var(--muted);margin:3px 0 6px}
+.peer-details summary{cursor:pointer;font-size:12.5px;color:var(--brand)}
+.ev-item{border:1px solid var(--line);border-left:3px solid var(--policy);border-radius:8px;
+  padding:10px 12px;margin-bottom:8px;background:#fff}
+.std .ev-item{border-left-color:var(--std)}
+.ev-title{font-size:13.5px;font-weight:600;color:var(--navy)}
+.ev-meta{font-size:12px;color:var(--muted);margin-top:2px}
+.empty{color:var(--muted);font-size:13px;margin:6px 0}
+/* 发布日期校验标记 */
+.date-fixed{display:inline-block;margin-left:5px;padding:0 6px;border-radius:4px;background:#fff4e0;
+  border:1px solid #f2ddb8;color:#b26a00;font-size:10.5px;font-weight:700;cursor:help}
+.sc-datenote{margin:5px 0;padding:7px 10px;border:1px solid #f2ddb8;border-radius:7px;
+  background:#fff8ec;font-size:11.8px;color:#7a4d00;line-height:1.6}
+/* 政策影响分析板块 */
+.fin-signal{margin:0 0 10px;padding:9px 13px;border:1px solid #f2ddb8;border-left:4px solid #b26a00;
+  border-radius:8px;background:#fff8ec;font-size:12.8px;color:#7a4d00}
+.impact-overview{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 12px}
+.impact-overview span{border-radius:999px;padding:3px 12px;font-size:12px;font-weight:700}
+.ov-bull{background:var(--policy-soft);color:var(--policy)}
+.ov-bear{background:#fdecea;color:var(--warn)}
+.ov-neutral{background:#eef1f6;color:#4b5563}
+.ov-total{background:var(--brand-soft);color:var(--brand)}
+.ia-card{border:1px solid var(--line);border-radius:10px;margin-bottom:9px;background:#fff;overflow:hidden;
+  border-left:4px solid var(--muted)}
+.ia-card.dir-bull{border-left-color:var(--policy)}
+.ia-card.dir-bear{border-left-color:var(--warn)}
+.ia-card summary{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:10px 13px;cursor:pointer;list-style:none}
+.ia-card summary::-webkit-details-marker{display:none}
+.ia-dir{flex:none;border-radius:5px;padding:1px 8px;font-size:11px;font-weight:800;white-space:nowrap}
+.dir-bull .ia-dir{background:var(--policy-soft);color:var(--policy)}
+.dir-bear .ia-dir{background:#fdecea;color:var(--warn)}
+.dir-neutral .ia-dir{background:#eef1f6;color:#4b5563}
+.ia-title{font-size:13.5px;font-weight:700;color:var(--navy);min-width:200px;flex:1}
+.ia-meta{font-size:11.5px;color:var(--muted);width:100%}
+.ia-body{padding:2px 13px 12px;border-top:1px dashed var(--line)}
+.ia-row{display:flex;gap:10px;margin-top:8px;font-size:12.6px;line-height:1.65}
+.ia-k{flex:none;width:62px;font-weight:700;color:var(--brand)}
+.ia-link{margin-top:8px;padding:8px 11px;border-radius:7px;background:var(--fin-soft);
+  font-size:12.3px;color:#5b3aa8}
+.hl-row span{color:var(--navy)}
+.impact-guide{margin-top:12px;padding:10px 13px;border:1px dashed var(--line-strong);border-radius:9px;
+  font-size:11.8px;color:var(--muted);line-height:1.7}
+.impact-guide b{color:var(--navy);margin-right:6px}
+.impact-no{background:var(--policy)!important}
+.risk{background:#fff8ec;border:1px solid #f2ddb8;border-radius:12px;padding:14px 18px;
+  font-size:12.5px;color:#7a4d00}
+.risk b{display:block;margin-bottom:4px}
+.cite{margin-left:4px;padding:0 6px;border:0;border-radius:4px;background:var(--brand-soft);
+  color:var(--brand);font-weight:800;font-size:10.5px;cursor:pointer;vertical-align:super;font-family:monospace}
+.cite:hover,.cite:focus-visible{background:var(--brand);color:#fff;outline:none}
+.cite.unresolved{background:#fdecea;color:var(--warn)}
+/* 右栏 来源面板 */
+.sources{position:sticky;top:56px;align-self:start;max-height:calc(100vh - 76px);overflow:auto;
+  background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+.sources h3{margin:0 0 4px;font-size:15px;color:var(--navy)}
+.sources .count{font-size:12px;color:var(--muted);margin-bottom:10px}
+.filters{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.filters button{border:1px solid var(--line);border-radius:999px;background:#fff;color:var(--muted);
+  padding:3px 11px;font-size:12px;cursor:pointer}
+.filters button.on{background:var(--brand);border-color:var(--brand);color:#fff;font-weight:700}
+.src-search{width:100%;padding:7px 10px;border:1px solid var(--line);border-radius:7px;
+  font-size:12.5px;margin-bottom:12px}
+.source-card{border:1px solid var(--line);border-radius:10px;padding:11px 13px;margin-bottom:10px;
+  border-left-width:3px;border-left-color:var(--policy);transition:box-shadow .25s}
+.source-card[data-type="standard"]{border-left-color:var(--std)}
+.source-card[data-type="finance"]{border-left-color:var(--fin)}
+.source-card.hl{box-shadow:0 0 0 3px var(--brand)}
+.source-card.hide{display:none}
+.sc-head{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.sc-id{font-family:monospace;font-weight:800;font-size:11px;color:var(--brand);
+  background:var(--brand-soft);border-radius:4px;padding:1px 7px}
+.sc-type{font-size:11px;font-weight:700;border-radius:4px;padding:1px 8px}
+.type-policy{background:var(--policy-soft);color:var(--policy)}
+.type-standard{background:var(--std-soft);color:var(--std)}
+.type-finance{background:var(--fin-soft);color:var(--fin)}
+.source-card h4{margin:0 0 4px;font-size:13px;color:var(--navy);line-height:1.5}
+.sc-meta{font-size:11.5px;color:var(--muted)}
+.sc-excerpt{font-size:12px;color:#42566f;margin:6px 0;line-height:1.65;
+  display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+.source-card.open .sc-excerpt{display:block}
+.sc-links a{font-size:12px;font-weight:700;text-decoration:none}
+.no-url{font-size:11.5px;color:var(--muted)}
+.foot{text-align:center;color:var(--muted);font-size:11.5px;padding:14px 0 4px}
+@media (max-width:1020px){
+  .layout{grid-template-columns:1fr}
+  .sources{position:static;max-height:none}
+}
+@media print{
+  .topbar,.filters,.src-search{display:none!important}
+  .layout{grid-template-columns:1fr;max-width:none;padding:0}
+  .sources{position:static;max-height:none;border:0}
+  .sc-excerpt{display:block}
+  body{background:#fff}
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div>比亚迪（002594）深度研究报告 · 可溯源版</div>
+  <div class="tags"><span>生成于 2026-08-27 17:07</span><span>金融数据：公开披露数据（akshare）</span><span>政策标准：深知可信搜索</span></div>
+</header>
+
+<div class="layout">
+  <main class="report">
+    <div class="r-head">
+      <h1>比亚迪（002594）深度研究报告</h1>
+      <div class="sub">所属行业：-- · 检索地域：全国 · 政策时间口径：2026年</div>
+      <div class="sub">点击正文角标 [P1]/[S1]/[F1] 可在右侧来源面板定位对应材料原文。</div>
+    </div>
+
+    <section class="section">
+      <h2><span class="no">一</span>公司概况 <span class="src-badge" data-cite-target="F1">数据来源：公开披露数据（akshare） <button class="cite" data-cite="F1" type="button" title="查看来源 F1">[F1]</button></span></h2>
+      <p class="lead">公司画像来自公开披露数据（同花顺 F10 / 东方财富 / 巨潮资讯，经 akshare）</p>
+      <table class="kv-table"><tbody><tr><th>证券简称</th><td>比亚迪</td></tr><tr><th>证券代码</th><td>002594</td></tr><tr><th>公司全称</th><td>比亚迪股份有限公司</td></tr><tr><th>上市日期</th><td>--</td></tr><tr><th>所属行业</th><td>--</td></tr><tr><th>所属地区</th><td>--</td></tr><tr><th>董事长</th><td>--</td></tr><tr><th>总经理</th><td>--</td></tr><tr><th>董事会秘书</th><td>--</td></tr><tr><th>员工人数</th><td>--</td></tr><tr><th>注册资本(万元)</th><td>--</td></tr></tbody></table><div class="biz"><span class="label">主营业务</span><p>锂离子电池以及其他电池、充电器、电子产品、仪器仪表、柔性线路板、五金制品、液晶显示器、手机零配件、模具、塑胶制品及其相关附件的生产、销售；3D眼镜、GPS导航产品的研发、生产及销售；货物及技术进出口（不含分销、国家专营专控商品）；作为比亚迪汽车有限公司比亚迪品牌乘用车、电动车的总经销商，从事上述品牌的乘用车、电动车及其零部件的营销、批发和出口，提供售后服务；电池管理系统、换流柜、逆变柜/器、汇流箱、开关柜、储能机组的销售；汽车电子装置研发、销售；新能源汽车关键零部件研发以及上述零部件的关键零件、部件的研发、销售；轨道交通运输设备（含轨道交通车辆、工程机械、各类机电设备、电子设备及零部件、电子电</p></div>
+    </section>
+
+    <section class="section">
+      <h2><span class="no">二</span>关键财务指标 <span class="src-badge" data-cite-target="F1">数据来源：公开披露数据（akshare） <button class="cite" data-cite="F1" type="button" title="查看来源 F1">[F1]</button></span></h2>
+      <p class="lead">最近 5 期 · 累计口径 · 同花顺 F10 主源 + 东方财富 ROE/负债率补充</p>
+      <table class="data-table"><thead><tr><th>报告期</th><th>营业总收入</th><th>归母净利润</th><th>基本EPS</th><th>加权ROE</th><th>资产负债率</th></tr></thead><tbody><tr><td>2026-03-31</td><td>1,502.25 亿</td><td>40.85 亿</td><td>0.45</td><td>1.65%</td><td>70.94%</td></tr><tr><td>2025-12-31</td><td>8,039.65 亿</td><td>326.19 亿</td><td>3.58</td><td>15.31%</td><td>70.74%</td></tr><tr><td>2025-09-30</td><td>5,662.66 亿</td><td>233.33 亿</td><td>2.56</td><td>10.83%</td><td>71.35%</td></tr><tr><td>2025-06-30</td><td>3,712.81 亿</td><td>155.11 亿</td><td>1.71</td><td>7.43%</td><td>71.08%</td></tr><tr><td>2025-03-31</td><td>1,703.60 亿</td><td>91.55 亿</td><td>1.04</td><td>4.37%</td><td>70.71%</td></tr></tbody></table>
+    </section>
+
+    <section class="section">
+      <h2><span class="no">三</span>行业对比 <span class="src-badge" data-cite-target="F1">数据来源：公开披露数据（akshare） <button class="cite" data-cite="F1" type="button" title="查看来源 F1">[F1]</button></span></h2>
+      <p class="lead">板块规模位次来自公开披露数据（同花顺板块成分，经 akshare）；指标排名口径见来源卡</p>
+      <p class="empty">未获取行业排名</p>
+    </section>
+
+    <section class="section">
+      <h2><span class="no">四</span>政策环境 <span class="src-badge">深知可信搜索 · 命中 5 条</span></h2>
+      <p class="lead">检索词：新能源汽车 支持政策 补贴 税收优惠 企业适用条件 · 摘录与原文链接见右侧来源卡</p>
+      <div class="ev-item"><div class="ev-title">中华人民共和国工业和信息化部 财政部 税务总局关于2026—2027年减免车辆购置税新能源汽车产品技术要求的公告<button class="cite" data-cite="P1" type="button" title="查看来源 P1">[P1]</button></div><div class="ev-meta">规范性文件清单（深知接口） · 2026年01月01日</div></div><div class="ev-item"><div class="ev-title">中华人民共和国工业和信息化部 财政部 税务总局关于调整享受车船税优惠的节能 新能源汽车产品技术要求的公告<button class="cite" data-cite="P2" type="button" title="查看来源 P2">[P2]</button></div><div class="ev-meta">规范性文件清单（深知接口） · 2024年07月01日</div></div><div class="ev-item"><div class="ev-title">中华人民共和国工业和信息化部 财政部 税务总局关于调整减免车辆购置税新能源汽车产品技术要求的公告<button class="cite" data-cite="P3" type="button" title="查看来源 P3">[P3]</button></div><div class="ev-meta">规范性文件清单（深知接口） · 2023年12月07日</div></div><div class="ev-item"><div class="ev-title">财政部 税务总局 工业和信息化部关于延续和优化新能源汽车车辆购置税减免政策的公告<button class="cite" data-cite="P4" type="button" title="查看来源 P4">[P4]</button></div><div class="ev-meta">规范性文件清单（深知接口） · 2023年06月19日</div></div><div class="ev-item"><div class="ev-title">商务部 发展改革委 工业和信息化部 公安部 财政部 自然资源部 生态环境部 住房和城乡建设部 交通运输部 文化和旅游部 人民银行 海关总署 税务总局 市场监管总局 体育总局 银保监会 能源局<button class="cite" data-cite="P5" type="button" title="查看来源 P5">[P5]</button></div><div class="ev-meta">规范性文件清单（深知接口） · 2022年07月05日</div></div>
+    </section>
+
+    <section class="section std">
+      <h2><span class="no">五</span>标准与准入 <span class="src-badge">深知可信搜索 · 命中 5 条</span></h2>
+      <p class="lead">检索词：新能源汽车 国家标准 行业规范 准入条件 技术规范</p>
+      <div class="ev-item"><div class="ev-title">公开征求GB 22757.2—2023《轻型汽车能源消耗量标识 第2部分：可外接充电式混合动力电动汽车和纯电动汽车》（第1号修改单）等三项强制性国家标准修改单的意见<button class="cite" data-cite="S1" type="button" title="查看来源 S1">[S1]</button></div><div class="ev-meta">未标注来源 · 2026年07月29日</div></div><div class="ev-item"><div class="ev-title">《新能源汽车维修作业安全要求》国家标准8月1日起实施<button class="cite" data-cite="S2" type="button" title="查看来源 S2">[S2]</button></div><div class="ev-meta">国家标准化管理委员会门户网站 · 2026年07月20日</div></div><div class="ev-item"><div class="ev-title">GB/T 47439-2026 新能源汽车维修作业安全要求<button class="cite" data-cite="S3" type="button" title="查看来源 S3">[S3]</button></div><div class="ev-meta">国家标准信息平台 · 2026年04月30日</div></div><div class="ev-item"><div class="ev-title">GB/T 47591-2026 道路车辆  动力蓄电池产品标牌标签及电子标识的信息<button class="cite" data-cite="S4" type="button" title="查看来源 S4">[S4]</button></div><div class="ev-meta">国家标准信息平台 · 2026年04月30日</div></div><div class="ev-item"><div class="ev-title">GB/T 47353-2026 新能源动力船舶术语<button class="cite" data-cite="S5" type="button" title="查看来源 S5">[S5]</button></div><div class="ev-meta">国家标准信息平台 · 2026年03月31日</div></div>
+    </section>
+
+    <section class="section impact"><h2><span class="no impact-no">六</span>政策影响分析 <span class="src-badge">投资视角 · 判断可溯源</span></h2><p class="lead">把第四、五部分的检索结果翻译为投资判断：方向 / 传导链 / 影响变量 / 跟踪指标 / 投资含义。点击角标回溯原文。</p><div class="fin-signal">⚡ 【财务信号】2026-03-31 归母净利润同比 -55.4%（营收同比 -11.8%），利润显著承压——建议结合政策时间表（如税惠退坡、需求前置）拆解归因</div><div class="impact-overview"><span class="ov-bull">利好 6</span><span class="ov-bear">利空关注 0</span><span class="ov-neutral">中性/待研判 4</span><span class="ov-total">共 10 条</span></div><details class="ia-card dir-bear" open><summary><span class="ia-dir">利好（注意退坡条款）</span><span class="ia-title">中华人民共和国工业和信息化部 财政部 税务总局关于2026—2027年减免车辆购置税新能源汽车产品技术要求的公告<button class="cite" data-cite="P1" type="button" title="查看来源 P1">[P1]</button></span><span class="ia-meta">财税优惠 · 时间窗口 发布 2026年01月01日；关键时点 2026年1月1日 / 2026—2027 / 2026年1月 / 2027年</span></summary><div class="ia-body"><div class="ia-row"><span class="ia-k">传导链</span><span>税收/补贴条款 → 终端购买成本 → 需求量 → 公司收入与利润</span></div><div class="ia-row"><span class="ia-k">影响变量</span><span>终端需求、产品价格弹性、单价/单件税惠金额</span></div><div class="ia-link">🔗 【财务信号】2026-03-31 归母净利润同比 -55.4%（营收同比 -11.8%），利润显著承压——建议结合政策时间表（如税惠退坡、需求前置）拆解归因</div><div class="ia-row"><span class="ia-k">跟踪指标</span><span>月度终端销量/渗透率、公司产销快报、免税目录车型进出</span></div><div class="ia-row hl-row"><span class="ia-k">投资含义</span><span>税惠幅度变化直接影响终端购买成本。若处于退坡通道，需评估需求前置效应与退坡后的真实需求中枢，并下修/上修相应报告期营收假设。</span></div></div></details><details class="ia-card dir-bear" open><summary><span class="ia-dir">利好（注意退坡条款）</span><span class="ia-title">中华人民共和国工业和信息化部 财政部 税务总局关于调整享受车船税优惠的节能 新能源汽车产品技术要求的公告<button class="cite" data-cite="P2" type="button" title="查看来源 P2">[P2]</button></span><span class="ia-meta">财税优惠 · 时间窗口 发布 2024年07月01日</span></summary><div class="ia-body"><div class="ia-row"><span class="ia-k">传导链</span><span>税收/补贴条款 → 终端购买成本 → 需求量 → 公司收入与利润</span></div><div class="ia-row"><span class="ia-k">影响变量</span><span>终端需求、产品价格弹性、单价/单件税惠金额</span></div><div class="ia-row"><span class="ia-k">跟踪指标</span><span>月度终端销量/渗透率、公司产销快报、免税目录车型进出</span></div><div class="ia-row hl-row"><span class="ia-k">投资含义</span><span>税惠幅度变化直接影响终端购买成本。若处于退坡通道，需评估需求前置效应与退坡后的真实需求中枢，并下修/上修相应报告期营收假设。</span></div></div></details><details class="ia-card dir-bear" open><summary><span class="ia-dir">利好（注意退坡条款）</span><span class="ia-title">中华人民共和国工业和信息化部 财政部 税务总局关于调整减免车辆购置税新能源汽车产品技术要求的公告<button class="cite" data-cite="P3" type="button" title="查看来源 P3">[P3]</button></span><span class="ia-meta">财税优惠 · 时间窗口 发布 2023年12月07日；关键时点 2023年</span></summary><div class="ia-body"><div class="ia-row"><span class="ia-k">传导链</span><span>税收/补贴条款 → 终端购买成本 → 需求量 → 公司收入与利润</span></div><div class="ia-row"><span class="ia-k">影响变量</span><span>终端需求、产品价格弹性、单价/单件税惠金额</span></div><div class="ia-row"><span class="ia-k">跟踪指标</span><span>月度终端销量/渗透率、公司产销快报、免税目录车型进出</span></div><div class="ia-row hl-row"><span class="ia-k">投资含义</span><span>税惠幅度变化直接影响终端购买成本。若处于退坡通道，需评估需求前置效应与退坡后的真实需求中枢，并下修/上修相应报告期营收假设。</span></div></div></details><details class="ia-card dir-bear" open><summary><span class="ia-dir">利好（注意退坡条款）</span><span class="ia-title">财政部 税务总局 工业和信息化部关于延续和优化新能源汽车车辆购置税减免政策的公告<button class="cite" data-cite="P4" type="button" title="查看来源 P4">[P4]</button></span><span class="ia-meta">财税优惠 · 时间窗口 发布 2023年06月19日；关键时点 2023年</span></summary><div class="ia-body"><div class="ia-row"><span class="ia-k">传导链</span><span>税收/补贴条款 → 终端购买成本 → 需求量 → 公司收入与利润</span></div><div class="ia-row"><span class="ia-k">影响变量</span><span>终端需求、产品价格弹性、单价/单件税惠金额</span></div><div class="ia-row"><span class="ia-k">跟踪指标</span><span>月度终端销量/渗透率、公司产销快报、免税目录车型进出</span></div><div class="ia-row hl-row"><span class="ia-k">投资含义</span><span>税惠幅度变化直接影响终端购买成本。若处于退坡通道，需评估需求前置效应与退坡后的真实需求中枢，并下修/上修相应报告期营收假设。</span></div></div></details><details class="ia-card dir-bear" open><summary><span class="ia-dir">利好（注意退坡条款）</span><span class="ia-title">商务部 发展改革委 工业和信息化部 公安部 财政部 自然资源部 生态环境部 住房和城乡建设部 交通运输部 文化和旅游部 人民银行 海关总署 税务总局 市场监管总局 体育总局 银保监会 能源局<button class="cite" data-cite="P5" type="button" title="查看来源 P5">[P5]</button></span><span class="ia-meta">财税优惠 · 时间窗口 发布 2022年07月05日</span></summary><div class="ia-body"><div class="ia-row"><span class="ia-k">传导链</span><span>税收/补贴条款 → 终端购买成本 → 需求量 → 公司收入与利润</span></div><div class="ia-row"><span class="ia-k">影响变量</span><span>终端需求、产品价格弹性、单价/单件税惠金额</span></div><div class="ia-row"><span class="ia-k">跟踪指标</span><span>月度终端销量/渗透率、公司产销快报、免税目录车型进出</span></div><div class="ia-row hl-row"><span class="ia-k">投资含义</span><span>税惠幅度变化直接影响终端购买成本。若处于退坡通道，需评估需求前置效应与退坡后的真实需求中枢，并下修/上修相应报告期营收假设。</span></div></div></details><details class="ia-card dir-bull" open><summary><span class="ia-dir">利好龙头，加速尾部出清</span><span class="ia-title">公开征求GB 22757.2—2023《轻型汽车能源消耗量标识 第2部分：可外接充电式混合动力电动汽车和纯电动汽车》（第1号修改单）等三项强制性国家标准修改单的意见<button class="cite" data-cite="S1" type="button" title="查看来源 S1">[S1]</button></span><span class="ia-meta">技术/准入门槛 · 时间窗口 发布 2026年07月29日</span></summary><div class="ia-body"><div class="ia-row"><span class="ia-k">传导链</span><span>技术门槛提高 → 合规成本上升 → 中小产能退出 → 行业集中度提升</span></div><div class="ia-row"><span class="ia-k">影响变量</span><span>行业集中度、合规 Capex、产品认证周期</span></div><div class="ia-row"><span class="ia-k">跟踪指标</span><span>准入目录更新、行业集中度（CR5）、竞品合规公告</span></div><div class="ia-row hl-row"><span class="ia-k">投资含义</span><span>技术门槛提升通常是龙头的&#x27;朋友&#x27;：合规成本相对可控，而尾部产能出清改善格局。跟踪行业集中度与竞品动态验证逻辑。</span></div></div></details><details class="ia-card dir-neutral" open><summary><span class="ia-dir">中性偏成本（合规要求）</span><span class="ia-title">《新能源汽车维修作业安全要求》国家标准8月1日起实施<button class="cite" data-cite="S2" type="button" title="查看来源 S2">[S2]</button></span><span class="ia-meta">安全/环保/回收标准 · 时间窗口 发布 2026年07月20日</span></summary><div class="ia-body"><div class="ia-row"><span class="ia-k">传导链</span><span>强制标准实施 → 合规改造/认证投入 → 成本上升 / 无资质者出清</span></div><div class="ia-row"><span class="ia-k">影响变量</span><span>合规成本、改造周期、市场份额再分配</span></div><div class="ia-row"><span class="ia-k">跟踪指标</span><span>标准实施日历、公司合规投入公告、回收量数据</span></div><div class="ia-row hl-row"><span class="ia-k">投资含义</span><span>强制标准带来确定性合规投入（成本项），同时淘汰无资质参与者（格局项）。需评估公司在标准实施前的准备进度。</span></div></div></details><details class="ia-card dir-neutral" open><summary><span class="ia-dir">中性偏成本（合规要求）</span><span class="ia-title">GB/T 47439-2026 新能源汽车维修作业安全要求<button class="cite" data-cite="S3" type="button" title="查看来源 S3">[S3]</button></span><span class="ia-meta">安全/环保/回收标准 · 时间窗口 发布 2026年04月30日；关键时点 2026-04-30</span></summary><div class="ia-body"><div class="ia-row"><span class="ia-k">传导链</span><span>强制标准实施 → 合规改造/认证投入 → 成本上升 / 无资质者出清</span></div><div class="ia-row"><span class="ia-k">影响变量</span><span>合规成本、改造周期、市场份额再分配</span></div><div class="ia-row"><span class="ia-k">跟踪指标</span><span>标准实施日历、公司合规投入公告、回收量数据</span></div><div class="ia-row hl-row"><span class="ia-k">投资含义</span><span>强制标准带来确定性合规投入（成本项），同时淘汰无资质参与者（格局项）。需评估公司在标准实施前的准备进度。</span></div></div></details><details class="ia-card dir-neutral" open><summary><span class="ia-dir">中性偏成本（合规要求）</span><span class="ia-title">GB/T 47591-2026 道路车辆  动力蓄电池产品标牌标签及电子标识的信息<button class="cite" data-cite="S4" type="button" title="查看来源 S4">[S4]</button></span><span class="ia-meta">安全/环保/回收标准 · 时间窗口 发布 2026年04月30日</span></summary><div class="ia-body"><div class="ia-row"><span class="ia-k">传导链</span><span>强制标准实施 → 合规改造/认证投入 → 成本上升 / 无资质者出清</span></div><div class="ia-row"><span class="ia-k">影响变量</span><span>合规成本、改造周期、市场份额再分配</span></div><div class="ia-row"><span class="ia-k">跟踪指标</span><span>标准实施日历、公司合规投入公告、回收量数据</span></div><div class="ia-row hl-row"><span class="ia-k">投资含义</span><span>强制标准带来确定性合规投入（成本项），同时淘汰无资质参与者（格局项）。需评估公司在标准实施前的准备进度。</span></div></div></details><details class="ia-card dir-neutral" open><summary><span class="ia-dir">中性偏成本（合规要求）</span><span class="ia-title">GB/T 47353-2026 新能源动力船舶术语<button class="cite" data-cite="S5" type="button" title="查看来源 S5">[S5]</button></span><span class="ia-meta">安全/环保/回收标准 · 时间窗口 发布 2026年03月31日；关键时点 2026-03-31</span></summary><div class="ia-body"><div class="ia-row"><span class="ia-k">传导链</span><span>强制标准实施 → 合规改造/认证投入 → 成本上升 / 无资质者出清</span></div><div class="ia-row"><span class="ia-k">影响变量</span><span>合规成本、改造周期、市场份额再分配</span></div><div class="ia-row"><span class="ia-k">跟踪指标</span><span>标准实施日历、公司合规投入公告、回收量数据</span></div><div class="ia-row hl-row"><span class="ia-k">投资含义</span><span>强制标准带来确定性合规投入（成本项），同时淘汰无资质参与者（格局项）。需评估公司在标准实施前的准备进度。</span></div></div></details><div class="impact-guide"><b>如何使用</b><span>建模：把「时间窗口」写入假设依据 · 跟踪：按「跟踪指标」建监测清单 · 归因：财报异常对照传导链拆解 · 核验：点击角标查官方原文。传导分析为规则模板生成，仅供研究参考，不构成投资建议。</span></div></section>
+
+    <div class="risk"><b>风险提示</b>
+      本报告基于公开披露数据与深知可信检索结果整理生成，仅供信息查询与研究参考，不构成任何投资建议、证券推荐或收益承诺。
+      金融数据以上市公司正式公告为准，政策与标准内容来自深知可信搜索检索，现行有效性以官方发布原文为准。
+      大模型可能存在理解偏差或生成不准确的情况，请结合上市公司正式公告等权威披露文件核查确认。市场有风险，投资需谨慎。
+    </div>
+
+    <div class="foot">深知可信投研 · dknowc-trusted-investment-research · 公开披露金融数据 + 深知政策标准洞察</div>
+  </main>
+
+  <aside class="sources" aria-label="来源面板">
+    <h3>来源材料（11）</h3>
+    <div class="count">P=政策 · S=标准 · F=金融数据 · 点击正文角标定位</div>
+    <div class="filters" role="group" aria-label="来源筛选">
+      <button class="on" data-f="all" type="button">全部</button>
+      <button data-f="policy" type="button">政策</button>
+      <button data-f="standard" type="button">标准</button>
+      <button data-f="finance" type="button">金融数据</button>
+    </div>
+    <input class="src-search" type="search" placeholder="搜索标题 / 机构 / 摘录…" aria-label="搜索来源">
+    <div class="src-list"><article class="source-card" id="src-P1" data-type="policy"><div class="sc-head"><span class="sc-id">P1</span><span class="sc-type type-policy">政策</span></div><h4>中华人民共和国工业和信息化部 财政部 税务总局关于2026—2027年减免车辆购置税新能源汽车产品技术要求的公告</h4><div class="sc-meta">规范性文件清单（深知接口） · 2026年01月01日</div><p class="sc-excerpt">五、2026年1月1日（含）起，在2026年及以后生效的《减免税目录》发布后，购置列入《减免税目录》的新能源汽车，可按规定享受车辆购置税减免政策。税务机关依据《减免税目录》、减免税标识以及办理车辆购置税纳税申报所需要提供的其他资料，办理车辆购置税减税手续。</p><div class="sc-links"><a href="https://fgk.chinatax.gov.cn/zcfgk/c100013/c5243525/content.html" target="_blank" rel="noopener">查看原文 ↗</a></div></article><article class="source-card" id="src-P2" data-type="policy"><div class="sc-head"><span class="sc-id">P2</span><span class="sc-type type-policy">政策</span></div><h4>中华人民共和国工业和信息化部 财政部 税务总局关于调整享受车船税优惠的节能 新能源汽车产品技术要求的公告</h4><div class="sc-meta">规范性文件清单（深知接口） · 2024年07月01日</div><p class="sc-excerpt">标　　题：关于调整享受车船税优惠的节能 新能源汽车产品技术要求的公告</p><div class="sc-links"><a href="https://fgk.chinatax.gov.cn/zcfgk/c100013/c5232255/content.html" target="_blank" rel="noopener">查看原文 ↗</a></div></article><article class="source-card" id="src-P3" data-type="policy"><div class="sc-head"><span class="sc-id">P3</span><span class="sc-type type-policy">政策</span></div><h4>中华人民共和国工业和信息化部 财政部 税务总局关于调整减免车辆购置税新能源汽车产品技术要求的公告</h4><div class="sc-meta">规范性文件清单（深知接口） · 2023年12月07日</div><p class="sc-excerpt">工业和信息化部财政部税务总局公告2023年第32号</p><div class="sc-links"><a href="http://guangdong.chinatax.gov.cn/gdsw/zjfg/2023-12/12/content_e382c2453b0c4fcc9c22bdbb86b52664.shtml" target="_blank" rel="noopener">查看原文 ↗</a></div></article><article class="source-card" id="src-P4" data-type="policy"><div class="sc-head"><span class="sc-id">P4</span><span class="sc-type type-policy">政策</span></div><h4>财政部 税务总局 工业和信息化部关于延续和优化新能源汽车车辆购置税减免政策的公告</h4><div class="sc-meta">规范性文件清单（深知接口） · 2023年06月19日</div><p class="sc-excerpt">关于延续和优化新能源汽车车辆购置税减免政策的公告 财政部 税务总局 工业和信息化部公告2023年第10号</p><div class="sc-links"><a href="https://fgk.chinatax.gov.cn/zcfgk/c102416/c5207352/content.html" target="_blank" rel="noopener">查看原文 ↗</a></div></article><article class="source-card" id="src-P5" data-type="policy"><div class="sc-head"><span class="sc-id">P5</span><span class="sc-type type-policy">政策</span></div><h4>商务部 发展改革委 工业和信息化部 公安部 财政部 自然资源部 生态环境部 住房和城乡建设部 交通运输部 文化和旅游部 人民银行 海关总署 税务总局 市场监管总局 体育总局 银保监会 能源局</h4><div class="sc-meta">规范性文件清单（深知接口） · 2022年07月05日</div><p class="sc-excerpt">（一）促进跨区域自由流通，破除新能源汽车市场地方保护，各地区不得设定本地新能源汽车车型备案目录，不得对新能源汽车产品销售及消费补贴设定不合理车辆参数指标。</p><div class="sc-links"><a href="https://www.mee.gov.cn/xxgk2018/xxgk/xxgk10/202207/t20220708_988146.html" target="_blank" rel="noopener">查看原文 ↗</a></div></article><article class="source-card" id="src-S1" data-type="standard"><div class="sc-head"><span class="sc-id">S1</span><span class="sc-type type-standard">标准</span></div><h4>公开征求GB 22757.2—2023《轻型汽车能源消耗量标识 第2部分：可外接充电式混合动力电动汽车和纯电动汽车》（第1号修改单）等三项强制性国家标准修改单的意见</h4><div class="sc-meta">未标注来源 · 2026年07月29日</div><p class="sc-excerpt">七、与实施强制性国家标准有关的政策措施 本标准的实施监督管理部门是中华人民共和国工业和信息化部和国家市场监督管理总局。 对于违反强制性国家标准的行为，应按照下列法律、行政法规、部门规章相关规定进行处理： 1.《道路机动车辆生产企业及产品准入管理办法》 第六条 申请道路机动车辆产品准入的，应当具备下列条件： （一）取得道路机动车辆生产企业准入； （二）生产的道路机动车辆产品能够满足安全、环保、节能、...</p><div class="sc-links"><a href="https://www.miit.gov.cn/jgsj/zbys/qcgy/art/2026/art_0405191e292742ed9830b295bffad31f.html" target="_blank" rel="noopener">查看原文 ↗</a></div></article><article class="source-card" id="src-S2" data-type="standard"><div class="sc-head"><span class="sc-id">S2</span><span class="sc-type type-standard">标准</span></div><h4>《新能源汽车维修作业安全要求》国家标准8月1日起实施</h4><div class="sc-meta">国家标准化管理委员会门户网站 · 2026年07月20日</div><p class="sc-excerpt">《新能源汽车维修作业安全要求》国家标准8月1日起实施</p><div class="sc-links"><a href="https://www.sac.gov.cn/xw/bzhdt/art/2026/art_e53c556eba4f43298d9da0cc71830ce6.html" target="_blank" rel="noopener">查看原文 ↗</a></div></article><article class="source-card" id="src-S3" data-type="standard"><div class="sc-head"><span class="sc-id">S3</span><span class="sc-type type-standard">标准</span></div><h4>GB/T 47439-2026 新能源汽车维修作业安全要求</h4><div class="sc-meta">国家标准信息平台 · 2026年04月30日</div><p class="sc-excerpt">中文标准名称:新能源汽车维修作业安全要求 　　英文标准名称:Safety requirements for maintenance operations of new energy vehicle 　　标准状态:现行 　　中国标准分类号（CCS）:R16 　　国际标准分类号（ICS）:43.180 　　发布日期:2026-04-30 　　实施日期:2026-08-01 　　主管部门:交通运输部 　...</p><div class="sc-links"><a href="https://openstd.samr.gov.cn/bzgk/std/newGbInfo?hcno=AA03F21B25FACFF947C1FA707F31A3CC" target="_blank" rel="noopener">查看原文 ↗</a></div></article><article class="source-card" id="src-S4" data-type="standard"><div class="sc-head"><span class="sc-id">S4</span><span class="sc-type type-standard">标准</span></div><h4>GB/T 47591-2026 道路车辆  动力蓄电池产品标牌标签及电子标识的信息</h4><div class="sc-meta">国家标准信息平台 · 2026年04月30日</div><p class="sc-excerpt">中文标准名称:道路车辆 动力蓄电池产品标牌标签及电子标识的信息 　　英文标准名称:Road vehicle—Information for plates, labels and electronic identifications of traction batteries 　　标准状态:现行 　　中国标准分类号（CCS）:T47 　　国际标准分类号（ICS）:43.020 　　发布日期:2026...</p><div class="sc-links"><a href="https://openstd.samr.gov.cn/bzgk/std/newGbInfo?hcno=E1F1DD8E28B8A4B51C13AF0495582755" target="_blank" rel="noopener">查看原文 ↗</a></div></article><article class="source-card" id="src-S5" data-type="standard"><div class="sc-head"><span class="sc-id">S5</span><span class="sc-type type-standard">标准</span></div><h4>GB/T 47353-2026 新能源动力船舶术语</h4><div class="sc-meta">国家标准信息平台 · 2026年03月31日</div><p class="sc-excerpt">中文标准名称:新能源动力船舶术语 　　英文标准名称:Terminologys for new energy powered ships 　　标准状态:即将实施 　　中国标准分类号（CCS）:U04 　　国际标准分类号（ICS）:47.020.01 　　发布日期:2026-03-31 　　实施日期:2026-10-01 　　主管部门:国家标准委 　　归口部门:国家标准委 　　发布单位:国家市场监督管...</p><div class="sc-links"><a href="https://openstd.samr.gov.cn/bzgk/std/newGbInfo?hcno=139A4E405D0ABBA266F4C29346ECE517" target="_blank" rel="noopener">查看原文 ↗</a></div></article><article class="source-card" id="src-F1" data-type="finance"><div class="sc-head"><span class="sc-id">F1</span><span class="sc-type type-finance">金融数据</span></div><h4>公开披露金融数据（akshare）</h4><div class="sc-meta">同花顺 F10 / 东方财富 / 巨潮资讯（经 akshare 开源库） · 2026-08-27 查询</div><p class="sc-excerpt">公司画像（公司资料）、关键财务指标（营业总收入/归母净利润/EPS/ROE/资产负债率）与行业定位来自公开披露渠道，经 akshare 开源库（同花顺 F10 主源 + 东方财富/巨潮备源）获取。本报告 比亚迪（002594）全部金融数值均来自该公开数据层，未做任何外部补齐。</p><div class="sc-links"><span class="no-url">无原文链接</span></div></article></div>
+  </aside>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var cards = Array.prototype.slice.call(document.querySelectorAll(".source-card"));
+  var byId = {};
+  var dup = [];
+  cards.forEach(function (c) {
+    var id = c.id.replace(/^src-/, "");
+    if (byId[id]) { dup.push(id); }
+    byId[id] = c;
+  });
+  if (dup.length && console.warn) { console.warn("[sources] duplicate ids:", dup); }
+
+  /* 角标 → 来源卡：精确 ID 匹配，缺失即提示，绝不按位置猜测 */
+  document.querySelectorAll("[data-cite]").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var card = byId[btn.getAttribute("data-cite")];
+      if (!card) {
+        btn.classList.add("unresolved");
+        if (console.error) { console.error("[cite] unresolved:", btn.getAttribute("data-cite")); }
+        return;
+      }
+      card.classList.remove("hide");
+      card.classList.remove("open");
+      card.classList.add("hl", "open");
+      card.scrollIntoView({ block: "center", behavior: "smooth" });
+      setTimeout(function () { card.classList.remove("hl"); }, 2200);
+    });
+  });
+
+  /* 筛选 + 搜索 */
+  var filter = "all";
+  var kw = "";
+  function apply() {
+    cards.forEach(function (c) {
+      var okType = filter === "all" || c.getAttribute("data-type") === filter;
+      var okKw = !kw || (c.textContent || "").toLowerCase().indexOf(kw) !== -1;
+      c.classList.toggle("hide", !(okType && okKw));
+    });
+  }
+  document.querySelectorAll(".filters button").forEach(function (b) {
+    b.addEventListener("click", function () {
+      document.querySelectorAll(".filters button").forEach(function (x) { x.classList.remove("on"); });
+      b.classList.add("on");
+      filter = b.getAttribute("data-f");
+      apply();
+    });
+  });
+  var search = document.querySelector(".src-search");
+  if (search) {
+    search.addEventListener("input", function () { kw = search.value.trim().toLowerCase(); apply(); });
+  }
+
+  if (console.info) {
+    console.info("[report] sources:", cards.length, "unique:", Object.keys(byId).length, "dup:", dup.length);
+  }
+})();
+</script>
+</body>
+</html>
