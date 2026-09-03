@@ -1,0 +1,422 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>兴通股份（603209）深度研究报告 · 可溯源版</title>
+<style>
+:root{
+  --navy:#0b1f3a; --ink:#172236; --muted:#667085; --line:#dce4ef;
+  --brand:#1559c7; --brand-soft:#e8f0ff;
+  --policy:#0c9b78; --policy-soft:#e2f6ef;
+  --std:#b26a00; --std-soft:#fff4e0;
+  --fin:#6d3cc7; --fin-soft:#f1ebfd;
+  --warn:#b93939;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+  color:var(--ink);background:#f4f7fb;line-height:1.7;font-size:14.5px}
+a{color:var(--brand)}
+.topbar{position:sticky;top:0;z-index:10;display:flex;justify-content:space-between;align-items:center;
+  padding:10px 22px;background:var(--navy);color:#fff;font-size:13px}
+.topbar .tags span{display:inline-block;margin-left:6px;padding:2px 10px;border:1px solid rgba(255,255,255,.3);
+  border-radius:999px;font-size:11.5px}
+.layout{display:grid;grid-template-columns:minmax(0,760px) minmax(340px,420px);gap:26px;
+  max-width:1240px;margin:0 auto;padding:26px 18px 60px}
+/* 左栏 报告 */
+.report{min-width:0}
+.r-head{padding:22px 26px;background:#fff;border:1px solid var(--line);border-radius:12px;margin-bottom:16px}
+.r-head h1{margin:0 0 6px;font-size:22px;color:var(--navy)}
+.r-head .sub{color:var(--muted);font-size:13px}
+.section{background:#fff;border:1px solid var(--line);border-radius:12px;padding:20px 24px;margin-bottom:16px}
+.section h2{margin:0 0 4px;font-size:16.5px;color:var(--navy);display:flex;align-items:center;gap:8px}
+.section h2 .no{display:inline-flex;width:24px;height:24px;border-radius:6px;background:var(--brand);
+  color:#fff;align-items:center;justify-content:center;font-size:13px}
+.section .lead{margin:0 0 12px;font-size:12.5px;color:var(--muted)}
+.src-badge{display:inline-flex;align-items:center;gap:2px;font-size:11.5px;color:var(--fin);
+  background:var(--fin-soft);border-radius:6px;padding:2px 8px}
+.kv-table{width:100%;border-collapse:collapse;font-size:13px}
+.kv-table th,.kv-table td{border:1px solid var(--line);padding:7px 10px;text-align:left}
+.kv-table th{background:#f2f5fb;width:130px;color:var(--navy)}
+.biz{margin-top:10px;padding:10px 12px;background:#f8faff;border-radius:8px}
+.biz .label{font-size:11.5px;color:var(--brand);font-weight:700}
+.biz p{margin:4px 0 0;font-size:13px}
+.data-table{width:100%;border-collapse:collapse;font-size:12.5px}
+.data-table th,.data-table td{border:1px solid var(--line);padding:7px 9px;text-align:left;white-space:nowrap}
+.data-table th{background:#f2f5fb;color:var(--navy)}
+.data-table.compact th,.data-table.compact td{padding:5px 8px}
+.rank-card{border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-bottom:10px;background:#fbfcfe}
+.rank-head{display:flex;justify-content:space-between;align-items:center}
+.rank-name{font-weight:700;color:var(--navy);font-size:13.5px}
+.rank-pos{font-family:monospace;font-weight:800;color:var(--brand);font-size:15px}
+.rank-meta{font-size:12px;color:var(--muted);margin:3px 0 6px}
+.peer-details summary{cursor:pointer;font-size:12.5px;color:var(--brand)}
+.ev-item{border:1px solid var(--line);border-left:3px solid var(--policy);border-radius:8px;
+  padding:10px 12px;margin-bottom:8px;background:#fff}
+.std .ev-item{border-left-color:var(--std)}
+.ev-title{font-size:13.5px;font-weight:600;color:var(--navy)}
+.ev-meta{font-size:12px;color:var(--muted);margin-top:2px}
+.empty{color:var(--muted);font-size:13px;margin:6px 0}
+/* 发布日期校验标记 */
+.date-fixed{display:inline-block;margin-left:5px;padding:0 6px;border-radius:4px;background:#fff4e0;
+  border:1px solid #f2ddb8;color:#b26a00;font-size:10.5px;font-weight:700;cursor:help}
+.sc-datenote{margin:5px 0;padding:7px 10px;border:1px solid #f2ddb8;border-radius:7px;
+  background:#fff8ec;font-size:11.8px;color:#7a4d00;line-height:1.6}
+/* 政策影响分析板块 */
+.fin-signal{margin:0 0 10px;padding:9px 13px;border:1px solid #f2ddb8;border-left:4px solid #b26a00;
+  border-radius:8px;background:#fff8ec;font-size:12.8px;color:#7a4d00}
+.impact-overview{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 12px}
+.impact-overview span{border-radius:999px;padding:3px 12px;font-size:12px;font-weight:700}
+.ov-bull{background:var(--policy-soft);color:var(--policy)}
+.ov-bear{background:#fdecea;color:var(--warn)}
+.ov-neutral{background:#eef1f6;color:#4b5563}
+.ov-total{background:var(--brand-soft);color:var(--brand)}
+.ia-card{border:1px solid var(--line);border-radius:10px;margin-bottom:9px;background:#fff;overflow:hidden;
+  border-left:4px solid var(--muted)}
+.ia-card.dir-bull{border-left-color:var(--policy)}
+.ia-card.dir-bear{border-left-color:var(--warn)}
+.ia-card summary{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:10px 13px;cursor:pointer;list-style:none}
+.ia-card summary::-webkit-details-marker{display:none}
+.ia-dir{flex:none;border-radius:5px;padding:1px 8px;font-size:11px;font-weight:800;white-space:nowrap}
+.dir-bull .ia-dir{background:var(--policy-soft);color:var(--policy)}
+.dir-bear .ia-dir{background:#fdecea;color:var(--warn)}
+.dir-neutral .ia-dir{background:#eef1f6;color:#4b5563}
+.ia-title{font-size:13.5px;font-weight:700;color:var(--navy);min-width:200px;flex:1}
+.ia-meta{font-size:11.5px;color:var(--muted);width:100%}
+.ia-body{padding:2px 13px 12px;border-top:1px dashed var(--line)}
+.ia-row{display:flex;gap:10px;margin-top:8px;font-size:12.6px;line-height:1.65}
+.ia-k{flex:none;width:62px;font-weight:700;color:var(--brand)}
+.ia-link{margin-top:8px;padding:8px 11px;border-radius:7px;background:var(--fin-soft);
+  font-size:12.3px;color:#5b3aa8}
+.hl-row span{color:var(--navy)}
+.impact-guide{margin-top:12px;padding:10px 13px;border:1px dashed var(--line-strong);border-radius:9px;
+  font-size:11.8px;color:var(--muted);line-height:1.7}
+.impact-guide b{color:var(--navy);margin-right:6px}
+.impact-no{background:var(--policy)!important}
+.risk{background:#fff8ec;border:1px solid #f2ddb8;border-radius:12px;padding:14px 18px;
+  font-size:12.5px;color:#7a4d00}
+.risk b{display:block;margin-bottom:4px}
+.cite{margin-left:4px;padding:0 6px;border:0;border-radius:4px;background:var(--brand-soft);
+  color:var(--brand);font-weight:800;font-size:10.5px;cursor:pointer;vertical-align:super;font-family:monospace}
+.cite:hover,.cite:focus-visible{background:var(--brand);color:#fff;outline:none}
+.cite.unresolved{background:#fdecea;color:var(--warn)}
+/* 右栏 来源面板 */
+.sources{position:sticky;top:56px;align-self:start;max-height:calc(100vh - 76px);overflow:auto;
+  background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+.sources h3{margin:0 0 4px;font-size:15px;color:var(--navy)}
+.sources .count{font-size:12px;color:var(--muted);margin-bottom:10px}
+.filters{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.filters button{border:1px solid var(--line);border-radius:999px;background:#fff;color:var(--muted);
+  padding:3px 11px;font-size:12px;cursor:pointer}
+.filters button.on{background:var(--brand);border-color:var(--brand);color:#fff;font-weight:700}
+.src-search{width:100%;padding:7px 10px;border:1px solid var(--line);border-radius:7px;
+  font-size:12.5px;margin-bottom:12px}
+.source-card{border:1px solid var(--line);border-radius:10px;padding:11px 13px;margin-bottom:10px;
+  border-left-width:3px;border-left-color:var(--policy);transition:box-shadow .25s}
+.source-card[data-type="standard"]{border-left-color:var(--std)}
+.source-card[data-type="finance"]{border-left-color:var(--fin)}
+.source-card.hl{box-shadow:0 0 0 3px var(--brand)}
+.source-card.hide{display:none}
+.sc-head{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.sc-id{font-family:monospace;font-weight:800;font-size:11px;color:var(--brand);
+  background:var(--brand-soft);border-radius:4px;padding:1px 7px}
+.sc-type{font-size:11px;font-weight:700;border-radius:4px;padding:1px 8px}
+.type-policy{background:var(--policy-soft);color:var(--policy)}
+.type-standard{background:var(--std-soft);color:var(--std)}
+.type-finance{background:var(--fin-soft);color:var(--fin)}
+.source-card h4{margin:0 0 4px;font-size:13px;color:var(--navy);line-height:1.5}
+.sc-meta{font-size:11.5px;color:var(--muted)}
+.sc-excerpt{font-size:12px;color:#42566f;margin:6px 0;line-height:1.65;
+  display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+.source-card.open .sc-excerpt{display:block}
+.sc-links a{font-size:12px;font-weight:700;text-decoration:none}
+.no-url{font-size:11.5px;color:var(--muted)}
+.foot{text-align:center;color:var(--muted);font-size:11.5px;padding:14px 0 4px}
+@media (max-width:1020px){
+  .layout{grid-template-columns:1fr}
+  .sources{position:static;max-height:none}
+}
+/* —— 移动端专项适配（手机阅读投研报告，方案对齐深知公文写作） —— */
+.mobile-nav{display:none}
+.sheet-mask{display:none}
+.sheet{display:none}
+@media (max-width:680px){
+  body{font-size:14px;line-height:1.8}
+  .layout{grid-template-columns:1fr;padding:12px 10px 40px;gap:14px}
+  .topbar{padding:8px 12px;font-size:12px;gap:4px;flex-wrap:wrap}
+  .topbar .tags span{font-size:10.5px;padding:1px 8px;margin-left:4px}
+  .r-head{padding:16px 14px;border-radius:10px}
+  .r-head h1{font-size:18px}
+  .r-head .sub{font-size:11.5px;line-height:1.6}
+  .section{padding:16px 14px;border-radius:10px}
+  .section h2{font-size:15.5px;flex-wrap:wrap}
+  .section h2 .no{width:22px;height:22px;font-size:12px}
+  .src-badge{font-size:10.5px;padding:2px 8px}
+  .data-table,.kv-table,.dv-table{font-size:12px}
+  .data-table th,.data-table td,.kv-table th,.kv-table td,.dv-table th,.dv-table td{padding:6px 7px;line-height:1.55}
+  .data-table,.dv-table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;white-space:nowrap}
+  .dv-basic{padding:9px 11px;gap:6px 12px;font-size:12px}
+  .band-row{flex-direction:column}
+  .band-seg{min-width:0}
+  .impact-overview span{font-size:11px;padding:2px 10px}
+  .ia-card summary{flex-wrap:wrap;gap:4px 8px}
+  .ia-card .ia-title{font-size:13px;line-height:1.5}
+  .ia-row{flex-direction:column;gap:2px}
+  .ia-row .ia-k{min-width:0}
+  .disc-box{font-size:11.5px;padding:9px 11px}
+  .matrix-action{font-size:13px}
+  .sources{padding:12px;border-radius:10px}
+  .source-card{padding:10px 11px}
+  .sc-excerpt{font-size:11.5px}
+  .mobile-nav{display:block;margin:0 0 14px;padding:11px 14px;border:1.5px solid var(--brand);
+    border-radius:10px;background:var(--brand-soft);color:var(--brand);font-weight:800;
+    font-size:13.5px;text-decoration:none;text-align:center}
+  /* 移动端来源底部弹层：点角标就地弹出来源卡，不打断阅读 */
+  .sheet-mask{display:block;position:fixed;inset:0;background:rgba(11,31,58,.45);z-index:99;opacity:0;
+    pointer-events:none;transition:opacity .2s}
+  .sheet-mask.show{opacity:1;pointer-events:auto}
+  .sheet{display:block;position:fixed;left:0;right:0;bottom:0;z-index:100;background:#fff;
+    border-radius:14px 14px 0 0;box-shadow:0 -8px 30px rgba(11,31,58,.25);
+    max-height:68vh;overflow-y:auto;-webkit-overflow-scrolling:touch;
+    padding:10px 16px 22px;transform:translateY(105%);transition:transform .25s ease}
+  .sheet.show{transform:translateY(0)}
+  .sheet-grab{width:38px;height:4px;border-radius:2px;background:#c9d4e2;margin:2px auto 8px}
+  .sheet-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+  .sheet-head b{font-size:13.5px;color:var(--navy)}
+  .sheet-close{border:1px solid var(--line);background:#f5f8fc;border-radius:8px;color:#3b4a61;
+    font-size:12.5px;font-weight:700;padding:5px 14px;cursor:pointer}
+  .sheet .source-card{box-shadow:none;margin-bottom:0}
+  .sheet .sc-excerpt{display:block;-webkit-line-clamp:unset;cursor:auto}
+}
+@media print{
+  .topbar,.filters,.src-search,.mobile-nav,.sheet,.sheet-mask{display:none!important}
+  .layout{grid-template-columns:1fr;max-width:none;padding:0}
+  .sources{position:static;max-height:none;border:0}
+  .sc-excerpt{display:block}
+  body{background:#fff}
+  .section,.r-head{break-inside:avoid;box-shadow:none}
+  .source-card{break-inside:avoid}
+}
+
+/* ===== 投资决策整合板块 ===== */
+.decision .decision-no{background:var(--warn)!important}
+.decision-badge{background:#fff4e0;color:var(--std)}
+.dv-block{margin:14px 0;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:#fff}
+.dv-block h4{margin:0 0 10px;font-size:14px;color:var(--navy);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.dv-basic{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;padding:10px 14px;
+  background:var(--brand-soft);border-radius:10px;margin:12px 0;font-size:13px}
+.dv-basic b{color:var(--navy);font-weight:700}
+.dv-src{color:var(--muted);font-size:11.5px}
+.dv-table{width:100%;border-collapse:collapse;font-size:13px;margin:6px 0}
+.dv-table th,.dv-table td{border:1px solid var(--line);padding:6px 10px;text-align:left}
+.dv-table th{background:#f6f8fb;color:var(--muted);font-weight:600;white-space:nowrap}
+.dv-table tr.row-neutral{background:var(--brand-soft)}
+.dv-table .pos{color:var(--policy);font-weight:700}
+.dv-table .neg{color:var(--warn);font-weight:700}
+.dv-details{font-size:12.5px;color:var(--muted);margin-top:6px}
+.dv-details ul{margin:6px 0 6px 18px;padding:0}
+.dv-pa{margin:6px 0 0;color:var(--navy);font-size:12.5px}
+.dv-degraded{color:var(--warn);font-size:12.5px}
+.dv-applic{margin:8px 0;padding:8px 11px;border:1px solid var(--warn);border-radius:8px;
+  background:#fdf0f0;color:var(--warn);font-size:12.5px;line-height:1.6}
+.dv-cur{font-size:13.5px;margin:4px 0}
+.dv-pair{display:flex;flex-wrap:wrap;gap:6px 22px;font-size:13px;margin:8px 0}
+.dv-note{color:var(--muted);font-size:12px;margin:6px 0 0}
+.band-row{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+.band-seg{flex:1;min-width:150px;border-radius:9px;padding:8px 12px;text-align:center;
+  font-size:13px;font-weight:700;color:#fff}
+.band-buy{background:#0c9b78}
+.band-hold{background:#b26a00}
+.band-sell{background:#b93939}
+.dv-center{font-size:13px;color:var(--navy);margin:6px 0}
+.matrix-table td:last-child{font-size:12px;color:var(--muted)}
+.dv-score{font-size:15px;font-weight:700;color:var(--navy);margin:10px 0 6px}
+.matrix-action{display:inline-block;border-radius:999px;padding:6px 16px;font-weight:700;color:#fff;margin:4px 0}
+.matrix-action.act-buy{background:#0c9b78}
+.matrix-action.act-hold{background:#b26a00}
+.matrix-action.act-avoid{background:#b93939}
+.dv-policy-note{color:var(--std);font-size:12px;margin:6px 0}
+.disc-box{margin-top:10px;padding:10px 13px;border:1px solid var(--line);border-radius:9px;
+  background:#fff8ec;font-size:12px;color:#7a5b00;line-height:1.6}
+.disc-box b{display:block;margin-bottom:4px}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div>兴通股份（603209）深度研究报告 · 可溯源版</div>
+  <div class="tags"><span>生成于 2026-09-03 13:11</span><span>金融数据：公开披露数据（akshare）</span><span>政策标准：深知可信搜索</span></div>
+</header>
+
+<div class="layout">
+  <main class="report">
+    <div class="r-head">
+      <h1>兴通股份（603209）深度研究报告</h1>
+      <div class="sub">所属行业：航运港口 · 检索地域：全国 · 政策时间口径：2026年</div>
+      <div class="sub">点击正文角标 [P1]/[S1]/[F1] 可在右侧来源面板定位对应材料原文。</div>
+    </div>
+
+    <a class="mobile-nav" href="#sources-panel">查看来源材料（11 条 · 点击角标可就地弹出原文）↓</a>
+
+    <section class="section">
+      <h2><span class="no">一</span>公司概况 <span class="src-badge" data-cite-target="F1">数据来源：公开披露数据（akshare） <button class="cite" data-cite="F1" type="button" title="查看来源 F1">[F1]</button></span></h2>
+      <p class="lead">公司画像来自公开披露数据（同花顺 F10 / 东方财富 / 巨潮资讯，经 akshare）</p>
+      <table class="kv-table"><tbody><tr><th>证券简称</th><td>兴通股份</td></tr><tr><th>证券代码</th><td>603209</td></tr><tr><th>公司全称</th><td>兴通海运股份有限公司</td></tr><tr><th>上市日期</th><td>20220324</td></tr><tr><th>所属行业</th><td>航运港口</td></tr></tbody></table><div class="biz"><span class="label">主营业务</span><p>许可项目：水路危险货物运输；国内船舶管理业务；国际客船、散装液体危险品船运输；第二类增值电信业务。（依法须经批准的项目，经相关部门批准后方可开展经营活动，具体经营项目以相关部门批准文件或许可证件为准）一般项目：国内货物运输代理；国际船舶业务管理；船舶租赁；软件开发；供应链管理服务。（除依法须经批准的项目外，凭营业执照依法自主开展经营活动）</p></div>
+    </section>
+
+    <section class="section">
+      <h2><span class="no">二</span>关键财务指标 <span class="src-badge" data-cite-target="F1">数据来源：公开披露数据（akshare） <button class="cite" data-cite="F1" type="button" title="查看来源 F1">[F1]</button></span></h2>
+      <p class="lead">最近 5 期 · 累计口径 · 同花顺 F10 主源 + 东方财富 ROE/负债率补充</p>
+      <table class="data-table"><thead><tr><th>报告期</th><th>营业总收入</th><th>归母净利润</th><th>基本EPS</th><th>加权ROE</th><th>资产负债率</th></tr></thead><tbody><tr><td>2026-06-30</td><td>10.19 亿</td><td>2.13 亿</td><td>0.66</td><td>6.17%</td><td>39.84%</td></tr><tr><td>2026-03-31</td><td>4.68 亿</td><td>1.11 亿</td><td>0.34</td><td>3.26%</td><td>36.60%</td></tr><tr><td>2025-12-31</td><td>16.28 亿</td><td>2.70 亿</td><td>0.88</td><td>8.99%</td><td>34.66%</td></tr><tr><td>2025-09-30</td><td>11.83 亿</td><td>1.94 亿</td><td>0.65</td><td>6.69%</td><td>36.02%</td></tr><tr><td>2025-06-30</td><td>7.87 亿</td><td>1.36 亿</td><td>0.47</td><td>5.01%</td><td>34.84%</td></tr></tbody></table>
+    </section>
+
+    <section class="section">
+      <h2><span class="no">三</span>行业对比 <span class="src-badge" data-cite-target="F1">数据来源：公开披露数据（akshare） <button class="cite" data-cite="F1" type="button" title="查看来源 F1">[F1]</button></span></h2>
+      <p class="lead">板块规模位次来自公开披露数据（同花顺板块成分，经 akshare）；指标排名口径见来源卡</p>
+      <div class="rank-card"><div class="rank-head"><span class="rank-name">zsz 行业排名</span><span class="rank-pos">31/37</span></div><div class="rank-meta">所属行业 航运港口 · 数据日期 实时 · 行业均值 355.4 亿</div><details class="peer-details"><summary>同业前 10</summary><table class="data-table compact"><thead><tr><th>排名</th><th>公司</th><th>代码</th><th>zsz</th></tr></thead><tbody><tr><td>1</td><td>中远海控</td><td>601919</td><td>2531.4547876</td></tr><tr><td>2</td><td>招商轮船</td><td>601872</td><td>1536.58467693</td></tr><tr><td>3</td><td>上港集团</td><td>600018</td><td>1289.70981192</td></tr><tr><td>4</td><td>中远海能</td><td>600026</td><td>1101.90253545</td></tr><tr><td>5</td><td>宁波港</td><td>601018</td><td>682.8490328</td></tr><tr><td>6</td><td>青岛港</td><td>601298</td><td>600.42675</td></tr><tr><td>7</td><td>招商港口</td><td>001872</td><td>593.9780846</td></tr><tr><td>8</td><td>招港B</td><td>201872</td><td>444.30454302</td></tr><tr><td>9</td><td>辽港股份</td><td>601880</td><td>344.14780131</td></tr><tr><td>10</td><td>中远海特</td><td>600428</td><td>319.11794194</td></tr></tbody></table></details></div>
+    </section>
+
+    <section class="section">
+      <h2><span class="no">四</span>政策环境 <span class="src-badge">深知可信搜索 · 命中 5 条</span></h2>
+      <p class="lead">检索词：航运港口 支持政策 补贴 税收优惠 企业适用条件 · 摘录与原文链接见右侧来源卡</p>
+      <div class="ev-item"><div class="ev-title">港口和船舶岸电管理办法（2025修正）<button class="cite" data-cite="P1" type="button" title="查看来源 P1">[P1]</button></div><div class="ev-meta">规范性文件清单（深知接口） · 2025年05月13日</div></div><div class="ev-item"><div class="ev-title">中华人民共和国企业所得税法实施条例<button class="cite" data-cite="P2" type="button" title="查看来源 P2">[P2]</button></div><div class="ev-meta">规范性文件清单（深知接口） · 2024年12月06日</div></div><div class="ev-item"><div class="ev-title">加力支持大规模设备更新和消费品以旧换新，这些与交通运输相关<button class="cite" data-cite="P3" type="button" title="查看来源 P3">[P3]</button></div><div class="ev-meta">规范性文件清单（深知接口） · 2024年07月24日</div></div><div class="ev-item"><div class="ev-title">PPP（政府和社会资本合作）项目税收策划业务指引——税务师行业涉税专业服务规范第3.4.4号（试行）<button class="cite" data-cite="P4" type="button" title="查看来源 P4">[P4]</button></div><div class="ev-meta">规范性文件清单（深知接口） · 2023年07月01日</div></div><div class="ev-item"><div class="ev-title">国家税务总局关于印发《新企业所得税法精神宣传提纲》的通知<button class="cite" data-cite="P5" type="button" title="查看来源 P5">[P5]</button></div><div class="ev-meta">规范性文件清单（深知接口） · 2023年05月26日</div></div>
+    </section>
+
+    <section class="section std">
+      <h2><span class="no">五</span>标准与准入 <span class="src-badge">深知可信搜索 · 命中 5 条</span></h2>
+      <p class="lead">检索词：航运港口 国家标准 行业规范 准入条件 技术规范</p>
+      <div class="ev-item"><div class="ev-title">GB/T 36028.1-2025 靠港船舶岸电系统技术条件 第1部分：高压供电<button class="cite" data-cite="S1" type="button" title="查看来源 S1">[S1]</button></div><div class="ev-meta">国家标准信息平台 · 2025年12月02日</div></div><div class="ev-item"><div class="ev-title">GB/T 11412.1-2025 海船安全开航技术要求 第1部分：一般要求<button class="cite" data-cite="S2" type="button" title="查看来源 S2">[S2]</button></div><div class="ev-meta">国家标准信息平台 · 2025年08月29日</div></div><div class="ev-item"><div class="ev-title">国家能源局发布一批重点行业标准<button class="cite" data-cite="S3" type="button" title="查看来源 S3">[S3]</button></div><div class="ev-meta">中国政府网门户网站 · 2025年07月11日</div></div><div class="ev-item"><div class="ev-title">交通运输部办公厅关于征求《港口作业安全要求第5部分：件杂货物（征求意见稿）》等两项强制性国家标准意见的函<button class="cite" data-cite="S4" type="button" title="查看来源 S4">[S4]</button></div><div class="ev-meta">未标注来源 · 2023年08月17日</div></div><div class="ev-item"><div class="ev-title">交通运输部 国家标准化管理委员会关于印发《交通运输智慧物流标准体系建设指南》的通知<button class="cite" data-cite="S5" type="button" title="查看来源 S5">[S5]</button></div><div class="ev-meta">未标注来源 · 2022年09月19日</div></div>
+    </section>
+
+    <section class="section impact"><h2><span class="no impact-no">六</span>政策影响分析 <span class="src-badge">投资视角 · 判断可溯源</span></h2><p class="lead">把第四、五部分的检索结果翻译为投资判断：方向 / 传导链 / 影响变量 / 跟踪指标 / 投资含义。点击角标回溯原文。</p><div class="fin-signal">⚡ 【财务信号】2026-06-30 归母净利润同比 +56.6%（营收同比 +29.5%），利润高增——可核查是否存在政策红利（补贴/税惠/格局改善）贡献</div><div class="impact-overview"><span class="ov-bull">利好 5</span><span class="ov-bear">利空关注 3</span><span class="ov-neutral">中性/待研判 2</span><span class="ov-total">共 10 条</span></div><details class="ia-card dir-bull" open><summary><span class="ia-dir">利好（关注申报窗口与名单）</span><span class="ia-title">港口和船舶岸电管理办法（2025修正）<button class="cite" data-cite="P1" type="button" title="查看来源 P1">[P1]</button></span><span class="ia-meta">财政补贴 · 时间窗口 发布 2025年05月13日</span></summary><div class="ia-body"><div class="ia-row"><span class="ia-k">传导链</span><span>补贴目录/名单 → 企业申报资格 → 其他收益/现金流 → 利润</span></div><div class="ia-row"><span class="ia-k">影响变量</span><span>申报资格、补贴额度、到账节奏</span></div><div class="ia-link">🔗 【财务信号】2026-06-30 归母净利润同比 +56.6%（营收同比 +29.5%），利润高增——可核查是否存在政策红利（补贴/税惠/格局改善）贡献</div><div class="ia-row"><span class="ia-k">跟踪指标</span><span>补贴目录/名单公告、公司其他收益科目、申报窗口通知</span></div><div class="ia-row hl-row"><span class="ia-k">投资含义</span><span>补贴影响利润表&#x27;其他收益&#x27;与现金流。关注公司是否在目录/名单内、补贴退坡节奏与申报窗口，避免把一次性补贴常态化计入盈利预测。</span></div></div></details><details class="ia-card dir-bear" open><summary><span class="ia-dir">利空关注（退坡/收紧信号）</span><span class="ia-title">中华人民共和国企业所得税法实施条例<button class="cite" data-cite="P2" type="button" title="查看来源 P2">[P2]</button></span><span class="ia-meta">财税优惠 · 时间窗口 发布 2024年12月06日</span></summary><div class="ia-body"><div class="ia-row"><span class="ia-k">传导链</span><span>税收/补贴条款 → 终端购买成本 → 需求量 → 公司收入与利润</span></div><div class="ia-row"><span class="ia-k">影响变量</span><span>终端需求、产品价格弹性、单价/单件税惠金额</span></div><div class="ia-row"><span class="ia-k">跟踪指标</span><span>月度终端销量/渗透率、公司产销快报、免税目录车型进出</span></div><div class="ia-row hl-row"><span class="ia-k">投资含义</span><span>税惠幅度变化直接影响终端购买成本。若处于退坡通道，需评估需求前置效应与退坡后的真实需求中枢，并下修/上修相应报告期营收假设。</span></div></div></details><details class="ia-card dir-bull" open><summary><span class="ia-dir">利好（关注申报窗口与名单）</span><span class="ia-title">加力支持大规模设备更新和消费品以旧换新，这些与交通运输相关<button class="cite" data-cite="P3" type="button" title="查看来源 P3">[P3]</button></span><span class="ia-meta">财政补贴 · 时间窗口 发布 2024年07月24日</span></summary><div class="ia-body"><div class="ia-row"><span class="ia-k">传导链</span><span>补贴目录/名单 → 企业申报资格 → 其他收益/现金流 → 利润</span></div><div class="ia-row"><span class="ia-k">影响变量</span><span>申报资格、补贴额度、到账节奏</span></div><div class="ia-row"><span class="ia-k">跟踪指标</span><span>补贴目录/名单公告、公司其他收益科目、申报窗口通知</span></div><div class="ia-row hl-row"><span class="ia-k">投资含义</span><span>补贴影响利润表&#x27;其他收益&#x27;与现金流。关注公司是否在目录/名单内、补贴退坡节奏与申报窗口，避免把一次性补贴常态化计入盈利预测。</span></div></div></details><details class="ia-card dir-bear" open><summary><span class="ia-dir">利空关注（退坡/收紧信号）</span><span class="ia-title">PPP（政府和社会资本合作）项目税收策划业务指引——税务师行业涉税专业服务规范第3.4.4号（试行）<button class="cite" data-cite="P4" type="button" title="查看来源 P4">[P4]</button></span><span class="ia-meta">财税优惠 · 时间窗口 发布 2023年07月01日</span></summary><div class="ia-body"><div class="ia-row"><span class="ia-k">传导链</span><span>税收/补贴条款 → 终端购买成本 → 需求量 → 公司收入与利润</span></div><div class="ia-row"><span class="ia-k">影响变量</span><span>终端需求、产品价格弹性、单价/单件税惠金额</span></div><div class="ia-row"><span class="ia-k">跟踪指标</span><span>月度终端销量/渗透率、公司产销快报、免税目录车型进出</span></div><div class="ia-row hl-row"><span class="ia-k">投资含义</span><span>税惠幅度变化直接影响终端购买成本。若处于退坡通道，需评估需求前置效应与退坡后的真实需求中枢，并下修/上修相应报告期营收假设。</span></div></div></details><details class="ia-card dir-bear" open><summary><span class="ia-dir">利空关注（退坡/收紧信号）</span><span class="ia-title">国家税务总局关于印发《新企业所得税法精神宣传提纲》的通知<button class="cite" data-cite="P5" type="button" title="查看来源 P5">[P5]</button></span><span class="ia-meta">财税优惠 · 时间窗口 发布 2023年05月26日</span></summary><div class="ia-body"><div class="ia-row"><span class="ia-k">传导链</span><span>税收/补贴条款 → 终端购买成本 → 需求量 → 公司收入与利润</span></div><div class="ia-row"><span class="ia-k">影响变量</span><span>终端需求、产品价格弹性、单价/单件税惠金额</span></div><div class="ia-row"><span class="ia-k">跟踪指标</span><span>月度终端销量/渗透率、公司产销快报、免税目录车型进出</span></div><div class="ia-row hl-row"><span class="ia-k">投资含义</span><span>税惠幅度变化直接影响终端购买成本。若处于退坡通道，需评估需求前置效应与退坡后的真实需求中枢，并下修/上修相应报告期营收假设。</span></div></div></details><details class="ia-card dir-neutral" open><summary><span class="ia-dir">中性偏成本（合规要求）</span><span class="ia-title">GB/T 36028.1-2025 靠港船舶岸电系统技术条件 第1部分：高压供电<button class="cite" data-cite="S1" type="button" title="查看来源 S1">[S1]</button></span><span class="ia-meta">安全/环保/回收标准 · 时间窗口 发布 2025年12月02日；关键时点 2025-12-02</span></summary><div class="ia-body"><div class="ia-row"><span class="ia-k">传导链</span><span>强制标准实施 → 合规改造/认证投入 → 成本上升 / 无资质者出清</span></div><div class="ia-row"><span class="ia-k">影响变量</span><span>合规成本、改造周期、市场份额再分配</span></div><div class="ia-row"><span class="ia-k">跟踪指标</span><span>标准实施日历、公司合规投入公告、回收量数据</span></div><div class="ia-row hl-row"><span class="ia-k">投资含义</span><span>强制标准带来确定性合规投入（成本项），同时淘汰无资质参与者（格局项）。需评估公司在标准实施前的准备进度。</span></div></div></details><details class="ia-card dir-bull" open><summary><span class="ia-dir">利好龙头，加速尾部出清</span><span class="ia-title">GB/T 11412.1-2025 海船安全开航技术要求 第1部分：一般要求<button class="cite" data-cite="S2" type="button" title="查看来源 S2">[S2]</button></span><span class="ia-meta">技术/准入门槛 · 时间窗口 发布 2025年08月29日；关键时点 2025-08-29</span></summary><div class="ia-body"><div class="ia-row"><span class="ia-k">传导链</span><span>技术门槛提高 → 合规成本上升 → 中小产能退出 → 行业集中度提升</span></div><div class="ia-row"><span class="ia-k">影响变量</span><span>行业集中度、合规 Capex、产品认证周期</span></div><div class="ia-row"><span class="ia-k">跟踪指标</span><span>准入目录更新、行业集中度（CR5）、竞品合规公告</span></div><div class="ia-row hl-row"><span class="ia-k">投资含义</span><span>技术门槛提升通常是龙头的&#x27;朋友&#x27;：合规成本相对可控，而尾部产能出清改善格局。跟踪行业集中度与竞品动态验证逻辑。</span></div></div></details><details class="ia-card dir-bull" open><summary><span class="ia-dir">利好龙头，加速尾部出清</span><span class="ia-title">国家能源局发布一批重点行业标准<button class="cite" data-cite="S3" type="button" title="查看来源 S3">[S3]</button></span><span class="ia-meta">技术/准入门槛 · 时间窗口 发布 2025年07月11日</span></summary><div class="ia-body"><div class="ia-row"><span class="ia-k">传导链</span><span>技术门槛提高 → 合规成本上升 → 中小产能退出 → 行业集中度提升</span></div><div class="ia-row"><span class="ia-k">影响变量</span><span>行业集中度、合规 Capex、产品认证周期</span></div><div class="ia-row"><span class="ia-k">跟踪指标</span><span>准入目录更新、行业集中度（CR5）、竞品合规公告</span></div><div class="ia-row hl-row"><span class="ia-k">投资含义</span><span>技术门槛提升通常是龙头的&#x27;朋友&#x27;：合规成本相对可控，而尾部产能出清改善格局。跟踪行业集中度与竞品动态验证逻辑。</span></div></div></details><details class="ia-card dir-neutral" open><summary><span class="ia-dir">中性偏成本（合规要求）</span><span class="ia-title">交通运输部办公厅关于征求《港口作业安全要求第5部分：件杂货物（征求意见稿）》等两项强制性国家标准意见的函<button class="cite" data-cite="S4" type="button" title="查看来源 S4">[S4]</button></span><span class="ia-meta">安全/环保/回收标准 · 时间窗口 发布 2023年08月17日</span></summary><div class="ia-body"><div class="ia-row"><span class="ia-k">传导链</span><span>强制标准实施 → 合规改造/认证投入 → 成本上升 / 无资质者出清</span></div><div class="ia-row"><span class="ia-k">影响变量</span><span>合规成本、改造周期、市场份额再分配</span></div><div class="ia-row"><span class="ia-k">跟踪指标</span><span>标准实施日历、公司合规投入公告、回收量数据</span></div><div class="ia-row hl-row"><span class="ia-k">投资含义</span><span>强制标准带来确定性合规投入（成本项），同时淘汰无资质参与者（格局项）。需评估公司在标准实施前的准备进度。</span></div></div></details><details class="ia-card dir-neutral" open><summary><span class="ia-dir">长期利好（渗透率逻辑）</span><span class="ia-title">交通运输部 国家标准化管理委员会关于印发《交通运输智慧物流标准体系建设指南》的通知<button class="cite" data-cite="S5" type="button" title="查看来源 S5">[S5]</button></span><span class="ia-meta">基础设施建设 · 时间窗口 发布 2022年09月19日</span></summary><div class="ia-body"><div class="ia-row"><span class="ia-k">传导链</span><span>配套设施完善 → 使用痛点缓解 → 渗透率天花板抬升 → 行业总需求</span></div><div class="ia-row"><span class="ia-k">影响变量</span><span>渗透率、设施覆盖率、使用成本</span></div><div class="ia-row"><span class="ia-k">跟踪指标</span><span>设施建设进度数据、渗透率月度值</span></div><div class="ia-row hl-row"><span class="ia-k">投资含义</span><span>配套设施完善抬升渗透率天花板，属于行业 beta 逻辑。对个股传导较慢，适合作为行业长期空间假设的支撑证据。</span></div></div></details><div class="impact-guide"><b>如何使用</b><span>建模：把「时间窗口」写入假设依据 · 跟踪：按「跟踪指标」建监测清单 · 归因：财报异常对照传导链拆解 · 核验：点击角标查官方原文。传导分析为规则模板生成，仅供研究参考，不构成投资建议。</span></div></section>
+
+    <section class="section decision"><h2><span class="no decision-no">七</span>投资决策整合 <span class="src-badge decision-badge">估值区间 · 研究参考 · 非投资建议</span></h2><p class="lead">把财务基本面与政策影响收敛为一个研究性结论：DCF 内在价值三情景 + 相对估值 + 目标价区间 + 决策矩阵。所有区间/动作均为规则模型生成，非投资建议，据此操作风险自担。</p><div class="dv-basic"><span>现价 <b>14.20 元</b></span><span>总市值 <b>46.1 亿</b></span><span>PE(TTM) <b>13.28</b></span><span>PB <b>1.35</b></span><span class="dv-src">来源 东方财富 数据中心-估值分析（akshare） <button class="cite" data-cite="F1" type="button" title="查看来源 F1">[F1]</button></span></div><div class="dv-block dv-degraded"><h4>DCF 内在价值</h4><p>本次缺可用自由现金流（FCF）或股本口径，或处重资产扩张期（FCF 为负），DCF 不输出量化内在价值（不硬算、不编造），请以下方相对估值与决策矩阵为准。</p></div><div class="dv-block"><h4>相对估值<span class="src-badge">弹性降级</span></h4><p class="dv-cur">当前 PE(TTM) <b>13.28</b> · PB <b>1.35</b> <button class="cite" data-cite="F1" type="button" title="查看来源 F1">[F1]</button></p><div class="dv-pair"><span>PE 分位：13.28，历史分位 <b>13%</b>（偏低）</span><span>PB 分位：1.35，历史分位 <b>7%</b>（偏低）</span></div><p class="dv-note">基于历史 PE/PB 分位（东方财富估值分析，近 N 个交易日）定位</p></div><div class="dv-block"><h4>估值区间与安全边际<span class="src-badge">模型假设 · 非买卖点位</span></h4><p class="dv-degraded">DCF 本次不可用（缺 FCF/股本或 FCF 为负），不输出量化区间，仅作方向性提示</p><p class="dv-note">重资产扩张期 FCF 为负或数据缺失，估值请结合相对估值与基本面判断</p></div><div class="dv-block"><h4>决策矩阵<span class="src-badge">规则模型 · 研究参考</span></h4><table class="dv-table matrix-table"><thead><tr><th>维度</th><th>权重</th><th>打分</th><th>依据</th></tr></thead><tbody><tr><td>护城河（盈利质量）</td><td>25%</td><td>中（2/3）</td><td>加权 ROE 9.0%（2025-12-31 年报，8-15% 一般）</td></tr><tr><td>财务健康</td><td>20%</td><td>中（2/3）</td><td>资产负债率 39.8%；近两期自由现金流为负</td></tr><tr><td>成长性</td><td>15%</td><td>强（3/3）</td><td>营收/净利同比均值 +43.2%</td></tr><tr><td>估值吸引力</td><td>30%</td><td>中（2/3）</td><td>PE 13.3 / PB 1.35（DCF 缺失，参考相对水平）</td></tr><tr><td>政策方向</td><td>10%</td><td>强（3/3）</td><td>政策净利好（利好 5 / 利空 3）</td></tr></tbody></table><div class="dv-score">综合得分 <b>62/100</b></div><div class="matrix-action act-hold">动作建议（研究参考）：持有观望</div><p class="dv-note">持有观望：关注财务拐点、政策时间表与估值分位变化，再决定增减。</p><p class="dv-note">动作建议由既定规则模型生成，仅作研究参考，非投资建议；请结合持牌机构研究独立决策。</p></div><div class="disc-box"><b>⚠️ 免责声明</b><p>本板块为基于公开披露数据与既定规则模型自动生成的估值区间与研究性结论，仅用于方法论演示与信息整合，不构成任何投资建议、证券推荐、收益承诺或买入/卖出指令。DCF 增速假设、折现率、政策方向修正均为参数化假设，实际结果可能显著偏离；历史 PE/PB 分位与同业比较存在口径与时效局限。证券投资决策请以持牌机构正式研究报告及您自身的独立判断为准，据此操作，风险自担。</p></div></section>
+
+    <div class="risk"><b>风险提示</b>
+      本报告基于公开披露数据与深知可信检索结果整理生成，仅供信息查询与研究参考，不构成任何投资建议、证券推荐或收益承诺。
+      金融数据以上市公司正式公告为准，政策与标准内容来自深知可信搜索检索，现行有效性以官方发布原文为准。
+      大模型可能存在理解偏差或生成不准确的情况，请结合上市公司正式公告等权威披露文件核查确认。市场有风险，投资需谨慎。
+    </div>
+
+    <div class="foot">深知可信投研 · dknowc-trusted-investment-research · 公开披露金融数据 + 深知政策标准洞察</div>
+  </main>
+
+  <aside class="sources" id="sources-panel" aria-label="来源面板">
+    <h3>来源材料（11）</h3>
+    <div class="count">P=政策 · S=标准 · F=金融数据 · 点击正文角标定位</div>
+    <div class="filters" role="group" aria-label="来源筛选">
+      <button class="on" data-f="all" type="button">全部</button>
+      <button data-f="policy" type="button">政策</button>
+      <button data-f="standard" type="button">标准</button>
+      <button data-f="finance" type="button">金融数据</button>
+    </div>
+    <input class="src-search" type="search" placeholder="搜索标题 / 机构 / 摘录…" aria-label="搜索来源">
+    <div class="src-list"><article class="source-card" id="src-P1" data-type="policy"><div class="sc-head"><span class="sc-id">P1</span><span class="sc-type type-policy">政策</span></div><h4>港口和船舶岸电管理办法（2025修正）</h4><div class="sc-meta">规范性文件清单（深知接口） · 2025年05月13日</div><p class="sc-excerpt">第四条地方各级交通运输（港口）主管部门应当积极争取地方人民政府出台资金补贴、电价优惠等扶持政策，支持码头岸电设施改造和船舶受电设施安装，鼓励船舶靠港使用岸电。</p><div class="sc-links"><a href="https://www.gov.cn/gongbao/2025/issue_12166/202507/content_7032497.html" target="_blank" rel="noopener">查看原文 ↗</a></div></article><article class="source-card" id="src-P2" data-type="policy"><div class="sc-head"><span class="sc-id">P2</span><span class="sc-type type-policy">政策</span></div><h4>中华人民共和国企业所得税法实施条例</h4><div class="sc-meta">规范性文件清单（深知接口） · 2024年12月06日</div><p class="sc-excerpt">第八十七条 企业所得税法第二十七条第(二)项所称国家重点扶持的公共基础设施项目，是指《公共基础设施项目企业所得税优惠目录》规定的港口码头、机场、铁路、公路、城市公共交通、电力、水利等项目。</p><div class="sc-links"><a href="https://fgk.chinatax.gov.cn/zcfgk/c100010/c5194417/content.html" target="_blank" rel="noopener">查看原文 ↗</a></div></article><article class="source-card" id="src-P3" data-type="policy"><div class="sc-head"><span class="sc-id">P3</span><span class="sc-type type-policy">政策</span></div><h4>加力支持大规模设备更新和消费品以旧换新，这些与交通运输相关</h4><div class="sc-meta">规范性文件清单（深知接口） · 2024年07月24日</div><p class="sc-excerpt">（二）支持老旧营运船舶报废更新。加快高能耗高排放老旧船舶报废更新，推动新能源清洁能源船舶发展。支持内河客船10年以上、货船15年以上以及沿海客船15年以上、货船20年以上船龄的老旧船舶报废更新。在报废基础上更新为燃油动力船舶或新能源清洁能源船舶的，根据不同船舶类型按1500—3200元/总吨予以补贴；新建新能源清洁能源船舶，根据不同船舶类型按1000—2200元/总吨予以补贴；只提前报废老旧营运船...</p><div class="sc-links"><a href="https://www.zgjtqx.org.cn/detail/24162.html" target="_blank" rel="noopener">查看原文 ↗</a></div></article><article class="source-card" id="src-P4" data-type="policy"><div class="sc-head"><span class="sc-id">P4</span><span class="sc-type type-policy">政策</span></div><h4>PPP（政府和社会资本合作）项目税收策划业务指引——税务师行业涉税专业服务规范第3.4.4号（试行）</h4><div class="sc-meta">规范性文件清单（深知接口） · 2023年07月01日</div><p class="sc-excerpt">一、企业投资经营符合《公共基础设施项目企业所得税优惠目录》规定条件和标准的公共基础设施项目，采用一次核准、分批次(如码头、泊位、航站楼、跑道、路段、发电机组等)建设的，凡同时符合以下条件的，可按每一批次为单位计算所得，并享受企业所得税“三免三减半”优惠：</p><div class="sc-links"><span class="no-url">无原文链接</span></div></article><article class="source-card" id="src-P5" data-type="policy"><div class="sc-head"><span class="sc-id">P5</span><span class="sc-type type-policy">政策</span></div><h4>国家税务总局关于印发《新企业所得税法精神宣传提纲》的通知</h4><div class="sc-meta">规范性文件清单（深知接口） · 2023年05月26日</div><p class="sc-excerpt">按照新企业所得税法有关优惠的规定，实施条例对优惠范围和方法作了进一步明确。主要内容包括：一是明确了免征和减半征收企业所得税的从事农、林、牧、渔业项目的所得的具体范围。二是明确了企业从事港口码头、机场、铁路、公路、电力、水利等基础设施项目投资经营所得，给予三免三减半的优惠。三是明确企业从事符合条件的环境保护、节能节水项目的所得，给予三免三减半的优惠。四是明确了符合国家产业政策规定的综合利用资源生产的...</p><div class="sc-links"><a href="https://fgk.chinatax.gov.cn/zcfgk/c100012/c5193941/content.html" target="_blank" rel="noopener">查看原文 ↗</a></div></article><article class="source-card" id="src-S1" data-type="standard"><div class="sc-head"><span class="sc-id">S1</span><span class="sc-type type-standard">标准</span></div><h4>GB/T 36028.1-2025 靠港船舶岸电系统技术条件 第1部分：高压供电</h4><div class="sc-meta">国家标准信息平台 · 2025年12月02日</div><p class="sc-excerpt">中文标准名称:靠港船舶岸电系统技术条件 第1部分：高压供电 　　英文标准名称:Shore-to-ship power supply system technical conditions—Part 1: High voltage connection 　　标准状态:现行 　　中国标准分类号（CCS）:R45 　　国际标准分类号（ICS）:03.220.40 　　发布日期:2025-12-02 　　...</p><div class="sc-links"><a href="https://openstd.samr.gov.cn/bzgk/std/newGbInfo?hcno=47118B802D79F5FE6FB90EB2062EE6A9" target="_blank" rel="noopener">查看原文 ↗</a></div></article><article class="source-card" id="src-S2" data-type="standard"><div class="sc-head"><span class="sc-id">S2</span><span class="sc-type type-standard">标准</span></div><h4>GB/T 11412.1-2025 海船安全开航技术要求 第1部分：一般要求</h4><div class="sc-meta">国家标准信息平台 · 2025年08月29日</div><p class="sc-excerpt">中文标准名称:海船安全开航技术要求 第1部分：一般要求 　　英文标准名称:Technical requirements for safety departure of seagoing ships—Part 1: General requirements 　　标准状态:现行 　　中国标准分类号（CCS）:R22 　　国际标准分类号（ICS）:03.220.40 　　发布日期:2025-08-29 ...</p><div class="sc-links"><a href="https://openstd.samr.gov.cn/bzgk/std/newGbInfo?hcno=4EA9913C7BA7CB0CBF3C3BA87B3C31F0" target="_blank" rel="noopener">查看原文 ↗</a></div></article><article class="source-card" id="src-S3" data-type="standard"><div class="sc-head"><span class="sc-id">S3</span><span class="sc-type type-standard">标准</span></div><h4>国家能源局发布一批重点行业标准</h4><div class="sc-meta">中国政府网门户网站 · 2025年07月11日</div><p class="sc-excerpt">（三）《港口岸电系统建设规范总体要求》。适用于港口岸电系统的新建及改造工程，规定了港口岸电系统建设的一般要求、港口电力系统、岸基供电系统、船岸连接系统、监控系统与运营服务平台等技术要求。标准的发布实施，有助于港口岸电系统建设的标准化、合理化、规范化，助力港口岸电系统建设的工程实施和运维。</p><div class="sc-links"><a href="https://www.gov.cn/lianbo/bumen/202507/content_7031592.htm" target="_blank" rel="noopener">查看原文 ↗</a></div></article><article class="source-card" id="src-S4" data-type="standard"><div class="sc-head"><span class="sc-id">S4</span><span class="sc-type type-standard">标准</span></div><h4>交通运输部办公厅关于征求《港口作业安全要求第5部分：件杂货物（征求意见稿）》等两项强制性国家标准意见的函</h4><div class="sc-meta">未标注来源 · 2023年08月17日</div><p class="sc-excerpt">目次 前 言 …… II 引 言 …… III 1 范围 …… 1 2 规范性引用文件 …… 1 3 术语和定义 …… 1 4 总体要求 …… 2 5 装卸船作业要求 …… 3 6 水平运输作业要求 …… 4 7 库场作业要求 …… 4 8 装卸车作业要求 …… 5 9 应急要求 …… 6 10 危险货物作业信息要求 …… 6 参 考 文 献 …… 7</p><div class="sc-links"><a href="https://xxgk.mot.gov.cn/2020/jigou/kjs/202308/t20230829_3902703.html" target="_blank" rel="noopener">查看原文 ↗</a></div></article><article class="source-card" id="src-S5" data-type="standard"><div class="sc-head"><span class="sc-id">S5</span><span class="sc-type type-standard">标准</span></div><h4>交通运输部 国家标准化管理委员会关于印发《交通运输智慧物流标准体系建设指南》的通知</h4><div class="sc-meta">未标注来源 · 2022年09月19日</div><p class="sc-excerpt">&lt;table&gt;  &lt;thead&gt;   &lt;tr&gt;    &lt;td&gt;标准项目及名称&lt;/td&gt;    &lt;td&gt;标准号或计划号&lt;/td&gt;    &lt;td&gt;性质&lt;/td&gt;    &lt;td&gt;实施日期&lt;/td&gt;    &lt;td&gt;主要内容&lt;/td&gt;    &lt;td&gt;备注&lt;/td&gt;   &lt;/tr&gt;  &lt;/thead&gt;  &lt;tbody&gt;   &lt;tr&gt;    &lt;td&gt;&lt;/td&gt;    &lt;td&gt;&lt;/td&gt;    &lt;td&gt;动态数据交...</p><div class="sc-links"><a href="https://jtyst.xinjiang.gov.cn/xjjtysj/zcfg/202211/3298e3ea5d954ee683549a2da6b4b265.shtml" target="_blank" rel="noopener">查看原文 ↗</a></div></article><article class="source-card" id="src-F1" data-type="finance"><div class="sc-head"><span class="sc-id">F1</span><span class="sc-type type-finance">金融数据</span></div><h4>公开披露金融数据（akshare）</h4><div class="sc-meta">同花顺 F10 / 东方财富 / 巨潮资讯（经 akshare 开源库） · 2026-09-03 查询</div><p class="sc-excerpt">公司画像（公司资料）、关键财务指标（营业总收入/归母净利润/EPS/ROE/资产负债率）与行业定位来自公开披露渠道，经 akshare 开源库（同花顺 F10 主源 + 东方财富/巨潮备源）获取。本报告 兴通股份（603209）全部金融数值均来自该公开数据层，未做任何外部补齐。</p><div class="sc-links"><span class="no-url">无原文链接</span></div></article></div>
+  </aside>
+</div>
+
+<div class="sheet-mask" aria-hidden="true"></div>
+<div class="sheet" role="dialog" aria-label="来源材料">
+  <div class="sheet-grab"></div>
+  <div class="sheet-head"><b>来源材料</b><button class="sheet-close" type="button">收起</button></div>
+  <div class="sheet-body"></div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var cards = Array.prototype.slice.call(document.querySelectorAll(".source-card"));
+  var byId = {};
+  var dup = [];
+  cards.forEach(function (c) {
+    var id = c.id.replace(/^src-/, "");
+    if (byId[id]) { dup.push(id); }
+    byId[id] = c;
+  });
+  if (dup.length && console.warn) { console.warn("[sources] duplicate ids:", dup); }
+
+  /* 移动端底部弹层：点角标就地展示来源卡，不打断正文阅读 */
+  var sheet = document.querySelector(".sheet");
+  var mask = document.querySelector(".sheet-mask");
+  function isMobile() {
+    return window.matchMedia("(max-width:680px)").matches;
+  }
+  function openSheet(card) {
+    if (!sheet) return;
+    var body = sheet.querySelector(".sheet-body");
+    var clone = card.cloneNode(true);
+    clone.removeAttribute("id");
+    clone.classList.remove("hide");
+    clone.classList.add("open");
+    body.innerHTML = "";
+    body.appendChild(clone);
+    sheet.classList.add("show");
+    mask.classList.add("show");
+    document.body.style.overflow = "hidden";
+    sheet.scrollTop = 0;
+  }
+  function closeSheet() {
+    if (!sheet) return;
+    sheet.classList.remove("show");
+    mask.classList.remove("show");
+    document.body.style.overflow = "";
+  }
+  if (sheet && mask) {
+    mask.addEventListener("click", closeSheet);
+    var closeBtn = sheet.querySelector(".sheet-close");
+    if (closeBtn) closeBtn.addEventListener("click", closeSheet);
+  }
+
+  /* 角标 → 来源卡：精确 ID 匹配，缺失即提示，绝不按位置猜测。
+     手机单栏下不滚动定位（会跳到页面底部打断阅读），改为底部弹层就地查看。 */
+  document.querySelectorAll("[data-cite]").forEach(function (btn) {
+    if (btn.classList.contains("sheet-close")) return;
+    btn.addEventListener("click", function () {
+      var card = byId[btn.getAttribute("data-cite")];
+      if (!card) {
+        btn.classList.add("unresolved");
+        if (console.error) { console.error("[cite] unresolved:", btn.getAttribute("data-cite")); }
+        return;
+      }
+      if (isMobile()) {
+        openSheet(card);
+        return;
+      }
+      card.classList.remove("hide");
+      card.classList.remove("open");
+      card.classList.add("hl", "open");
+      card.scrollIntoView({ block: "center", behavior: "smooth" });
+      setTimeout(function () { card.classList.remove("hl"); }, 2200);
+    });
+  });
+
+  /* 筛选 + 搜索 */
+  var filter = "all";
+  var kw = "";
+  function apply() {
+    cards.forEach(function (c) {
+      var okType = filter === "all" || c.getAttribute("data-type") === filter;
+      var okKw = !kw || (c.textContent || "").toLowerCase().indexOf(kw) !== -1;
+      c.classList.toggle("hide", !(okType && okKw));
+    });
+  }
+  document.querySelectorAll(".filters button").forEach(function (b) {
+    b.addEventListener("click", function () {
+      document.querySelectorAll(".filters button").forEach(function (x) { x.classList.remove("on"); });
+      b.classList.add("on");
+      filter = b.getAttribute("data-f");
+      apply();
+    });
+  });
+  var search = document.querySelector(".src-search");
+  if (search) {
+    search.addEventListener("input", function () { kw = search.value.trim().toLowerCase(); apply(); });
+  }
+
+  if (console.info) {
+    console.info("[report] sources:", cards.length, "unique:", Object.keys(byId).length, "dup:", dup.length);
+  }
+})();
+</script>
+</body>
+</html>

@@ -8,6 +8,10 @@ from typing import Dict, Any, List, Optional
 from datetime import datetime
 
 
+# 报告板块中文序号（一~八；政策影响/决策板块可能缺失，故序号须运行时算）
+_CN_NO = ["", "一", "二", "三", "四", "五", "六", "七", "八"]
+
+
 def format_number(value: Any, unit: str = "") -> str:
     """格式化数字显示
 
@@ -147,6 +151,8 @@ def format_industry_rank(rank_data: Dict[str, Any], metric_name: str) -> str:
             sec_code = company.get('secCode', 'N/A')
             rank = company.get('rank', 'N/A')
             value = company.get('value', 'N/A')
+            if isinstance(value, (int, float)):
+                value = f"{value:.1f} 亿"
             lines.append(f"  {i}. {sec_name} ({sec_code}): 排名 {rank}, {metric_name} = {value}")
 
     return "\n".join(lines)
@@ -186,11 +192,12 @@ def format_policy_highlights(highlights: List[Dict[str, str]],
     return "\n".join(lines)
 
 
-def format_impact_section(impact_data: Dict[str, Any]) -> List[str]:
-    """渲染"六、政策影响分析"板块（Markdown）
+def format_impact_section(impact_data: Dict[str, Any], no: str) -> List[str]:
+    """渲染"政策影响分析"板块（Markdown）
 
     Args:
         impact_data: impact_analysis.generate_impact_analysis 的返回值
+        no: 板块中文序号（如"六"）
 
     Returns:
         Markdown 行列表
@@ -199,7 +206,7 @@ def format_impact_section(impact_data: Dict[str, Any]) -> List[str]:
     summary = impact_data.get("summary", {})
     signals = impact_data.get("signals", [])
 
-    lines.append("## 六、政策影响分析（投资视角）")
+    lines.append(f"## {no}、政策影响分析（投资视角）")
     lines.append("")
     lines.append("> 本板块把第四、五部分检索到的政策/标准翻译为投资研究可用的判断：")
     lines.append("> 每条含影响方向、传导链、影响变量、跟踪指标与投资含义，角标可回溯原文。")
@@ -250,10 +257,178 @@ def format_impact_section(impact_data: Dict[str, Any]) -> List[str]:
     return lines
 
 
+def _fmt_pct(x) -> str:
+    try:
+        return f"{float(x) * 100:.0f}%"
+    except (TypeError, ValueError):
+        return "--"
+
+
+def _fmt_pct_pp(x) -> str:
+    """分位值（0~1）-> 百分比"""
+    try:
+        return f"{float(x) * 100:.0f}%"
+    except (TypeError, ValueError):
+        return "--"
+
+
+def format_decision_section(valuation_data: Dict[str, Any], no: str) -> List[str]:
+    """渲染"投资决策整合"板块（Markdown）
+
+    Args:
+        valuation_data: valuation.generate_valuation_data 的返回值
+        no: 板块中文序号（如"七"）
+
+    Returns:
+        Markdown 行列表
+    """
+    lines: List[str] = []
+    basic = valuation_data.get("basic", {})
+    dcf = valuation_data.get("dcf", {})
+    relative = valuation_data.get("relative", {})
+    bands = valuation_data.get("bands", {})
+    matrix = valuation_data.get("matrix", {})
+    disclaim = valuation_data.get("disclaimer", "")
+
+    lines.append(f"## {no}、投资决策整合（估值区间 · 研究参考 · 非投资建议）")
+    lines.append("")
+    lines.append("> 本板块把财务基本面（第二部分）与政策影响（上一部分）收敛为一个研究性结论：")
+    lines.append("> DCF 内在价值三情景 + 相对估值 + 目标价区间 + 决策矩阵。")
+    lines.append("> **所有区间/动作均为规则模型生成的研究参考，非投资建议，据此操作风险自担。**")
+    lines.append("")
+
+    # 估值基础
+    price = basic.get("price")
+    lines.append("### 估值基础")
+    lines.append("")
+    src_note = basic.get("sourceNote") or "公开披露数据（akshare）"
+    price_txt = f"{price:.2f} 元" if price else "--"
+    mcap_txt = f"{basic.get('marketCap')} 亿元" if basic.get("marketCap") is not None else "--"
+    share_txt = f"{basic.get('totalShare')} 亿股" if basic.get("totalShare") is not None else "--"
+    pe_txt = f"{basic.get('peTtm')}" if basic.get("peTtm") is not None else "--"
+    pb_txt = f"{basic.get('pb')}" if basic.get("pb") is not None else "--"
+    lines.append(f"- **现价**: {price_txt} | **总市值**: {mcap_txt} | **总股本**: {share_txt}")
+    lines.append(f"- **PE(TTM)**: {pe_txt} | **PB**: {pb_txt} | **数据源**: {src_note}")
+    lines.append("")
+
+    # DCF
+    lines.append("### DCF 内在价值（三情景）")
+    lines.append("")
+    if dcf.get("available"):
+        scen = dcf.get("scenarios", {})
+        lines.append("| 情景 | 增速假设 | 内在价值(元/股) | 较现价 |")
+        lines.append("|------|---------|----------------|--------|")
+        for key in ("pessimistic", "neutral", "optimistic"):
+            s = scen.get(key) or {}
+            up = s.get("upsidePct")
+            up_txt = f"{up:+.1f}%" if up is not None else "--"
+            lines.append(f"| {s.get('label','')} | {_fmt_pct(s.get('growth'))} | "
+                         f"{s.get('intrinsicPs','--')} | {up_txt} |")
+        lines.append("")
+        lines.append("**假设与依据**：")
+        lines.append("")
+        for a in dcf.get("assumptions", []):
+            lines.append(f"- {a}")
+        lines.append("")
+        if dcf.get("applicabilityNote"):
+            lines.append(f"> {dcf['applicabilityNote']}")
+            lines.append("")
+        pa = dcf.get("policyAdj", {})
+        lines.append(f"**政策衔接**：{pa.get('note','')} "
+                     f"（利好 {pa.get('bullCount',0)} / 利空 {pa.get('bearCount',0)}）")
+        lines.append("")
+    else:
+        lines.append("> 本次缺少可用的自由现金流（FCF）或股本口径，或公司处于重资产扩张期（FCF 为负），")
+        lines.append("> **DCF 不输出量化内在价值**，估值判断以下方相对估值与决策矩阵为准（不硬算、不编造）。")
+        lines.append("")
+
+    # 相对估值
+    lines.append("### 相对估值")
+    lines.append("")
+    cur = relative.get("current", {})
+    pe_c, pb_c = cur.get("peTtm"), cur.get("pb")
+    lines.append(f"- **当前**：PE(TTM) {pe_c if pe_c is not None else '--'} / PB {pb_c if pb_c is not None else '--'}")
+    mode = relative.get("mode")
+    if mode == "percentile":
+        pl = relative.get("percentile") or {}
+        pe_p, pb_p = (pl.get("pe") or {}), (pl.get("pb") or {})
+        pe_txt = (f"{pe_p.get('current')}，{_fmt_pct_pp(pe_p.get('pct'))} 历史分位（{pe_p.get('label','')}）"
+                  if pe_p.get("pct") is not None else "--")
+        pb_txt = (f"{pb_p.get('current')}，{_fmt_pct_pp(pb_p.get('pct'))} 历史分位（{pb_p.get('label','')}）"
+                  if pb_p.get("pct") is not None else "--")
+        lines.append(f"- **PE 分位**：{pe_txt} | **PB 分位**：{pb_txt}")
+        lines.append(f"- 口径：{relative.get('comment','')}（近 {pe_p.get('windowDays','--')} 交易日）")
+    elif mode == "peer_median":
+        pm = relative.get("peerMedian") or {}
+        lines.append(f"- **同业中位**：PE {pm.get('peerMedianPe') if pm.get('peerMedianPe') is not None else '--'} "
+                     f"/ PB {pm.get('peerMedianPb') if pm.get('peerMedianPb') is not None else '--'}"
+                     f"（{pm.get('industryName','同业')}，样本 {pm.get('sampleN','--')} 家）")
+        lines.append(f"- **市场中位**：PE {pm.get('marketMedianPe') if pm.get('marketMedianPe') is not None else '--'} "
+                     f"/ PB {pm.get('marketMedianPb') if pm.get('marketMedianPb') is not None else '--'}")
+        lines.append(f"- 说明：{pm.get('note','')}")
+    else:
+        lines.append(f"- 说明：{relative.get('comment','')}")
+    lines.append("")
+
+    # 目标价区间
+    lines.append("### 估值区间与安全边际")
+    lines.append("")
+    if bands.get("intrinsicCenter"):
+        lines.append(f"- **中性内在价值**: {bands['intrinsicCenter']} 元/股")
+        if bands.get("buyBelow") is not None:
+            lines.append(f"- **买入关注区（模型假设）**: ≤ {bands['buyBelow']} 元")
+        if bands.get("sellAbove") is not None:
+            lines.append(f"- **卖出/高估观察区（模型假设）**: ≥ {bands['sellAbove']} 元")
+        if bands.get("hold"):
+            lines.append(f"- **持有观察区（模型假设）**: {bands['hold'][0]} ~ {bands['hold'][1]} 元")
+        lines.append(f"- 口径：{bands.get('basedOn','')}")
+    else:
+        lines.append(f"- {bands.get('basedOn','')}")
+        if bands.get("note"):
+            lines.append(f"- 提示：{bands.get('note')}")
+    lines.append("")
+
+    # 决策矩阵
+    lines.append("### 决策矩阵")
+    lines.append("")
+    lines.append("| 维度 | 权重 | 打分 | 依据 |")
+    lines.append("|------|------|------|------|")
+    for d in matrix.get("dimensions", []):
+        ev = "；".join(d.get("evidence", [])) or "--"
+        w = d.get("weight")
+        w_txt = f"{w*100:.0f}%" if w is not None else "--"
+        lines.append(f"| {d.get('label','')} | {w_txt} | "
+                     f"{d.get('tone','')}（{d.get('score','--')}/3） | {ev} |")
+    lines.append("")
+    mat_score = matrix.get("score")
+    score_txt = f"{mat_score*100:.0f}/100" if mat_score is not None else "--"
+    lines.append(f"**综合得分**: {score_txt}")
+    lines.append("")
+    if matrix.get("policyWeightZero"):
+        lines.append("> 注：未开通深知检索，本次决策**未纳入政策/标准维度**，退化为财务质量 + 估值维度。")
+        lines.append("")
+    lines.append(f"**动作建议（研究参考）**: **{matrix.get('actionLabel','--')}**")
+    lines.append("")
+    if matrix.get("actionNote"):
+        lines.append(f"- {matrix.get('actionNote')}")
+        lines.append("")
+    lines.append(f"- 模型说明：{matrix.get('rulesNote','')}")
+    lines.append("")
+
+    # 免责
+    lines.append("---")
+    lines.append("")
+    lines.append(f"> ⚠️ **免责声明**：{disclaim}")
+    lines.append("")
+
+    return lines
+
+
 def generate_report(stock_code: str,
                     company_data: Dict[str, Any],
                     policy_data: Dict[str, Any],
-                    impact_data: Optional[Dict[str, Any]] = None) -> str:
+                    impact_data: Optional[Dict[str, Any]] = None,
+                    valuation_data: Optional[Dict[str, Any]] = None) -> str:
     """生成完整的增强版投研报告
 
     Args:
@@ -261,6 +436,7 @@ def generate_report(stock_code: str,
         company_data: akshare_api.get_company_research_data 返回的数据
         policy_data: dknowc_search.get_full_research_data 返回的数据
         impact_data: impact_analysis.generate_impact_analysis 返回的影响分析（可选）
+        valuation_data: valuation.generate_valuation_data 返回的估值/决策整合（可选）
 
     Returns:
         完整的 Markdown 报告
@@ -293,16 +469,20 @@ def generate_report(stock_code: str,
     lines.append("## 三、行业对比")
     lines.append("")
     industry_ranks = company_data.get('industryRanks', {})
-    for metric, rank_data in industry_ranks.items():
-        metric_name = {
-            'jzcsyl': 'ROE',
-            'pe': 'PE',
-            'pb': 'PB',
-            'gmjlr': '归母净利润'
-        }.get(metric, metric)
-        lines.append(f"### {metric_name} 行业排名")
-        lines.append("")
-        lines.append(format_industry_rank(rank_data, metric_name))
+    if industry_ranks:
+        for metric, rank_data in industry_ranks.items():
+            metric_name = {
+                'jzcsyl': 'ROE',
+                'pe': 'PE',
+                'pb': 'PB',
+                'gmjlr': '归母净利润'
+            }.get(metric, metric)
+            lines.append(f"### {metric_name} 行业排名")
+            lines.append("")
+            lines.append(format_industry_rank(rank_data, metric_name))
+            lines.append("")
+    else:
+        lines.append("*未获取行业排名（板块成分接口降级），可稍后重试或参考同业个股对比*")
         lines.append("")
 
     # 第四部分：政策环境（增强）
@@ -321,9 +501,14 @@ def generate_report(stock_code: str,
     lines.append("")
     lines.append(format_policy_highlights(standard_highlights, "标准"))
 
-    # 第六部分：政策影响分析（核心增强）
+    # 政策影响分析 / 投资决策整合（编号动态：前五部分固定，二者都可能缺失）
+    next_no = 6
     if impact_data:
-        lines.extend(format_impact_section(impact_data))
+        lines.extend(format_impact_section(impact_data, _CN_NO[next_no]))
+        next_no += 1
+    if valuation_data:
+        lines.extend(format_decision_section(valuation_data, _CN_NO[next_no]))
+        next_no += 1
 
     # 风险提示
     lines.append("---")

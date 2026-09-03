@@ -115,8 +115,8 @@ def run(stock_keyword: str, output_file: Optional[str] = None) -> str:
     else:
         print("  ⚠ 跳过（未开通深知检索能力）")
 
-    # 5. 影响分析 + 三件套输出
-    print(f"\n[5/5] 政策影响分析 + 报告生成...")
+    # 5. 影响分析 + 估值决策整合 + 三件套输出
+    print(f"\n[5/5] 影响分析 + 估值决策整合 + 报告生成...")
     impact_data = None
     if policy_data.get("policyHighlights") or policy_data.get("standardHighlights"):
         from impact_analysis import generate_impact_analysis
@@ -124,10 +124,24 @@ def run(stock_keyword: str, output_file: Optional[str] = None) -> str:
         s = impact_data["summary"]
         print(f"  ✓ 影响分析 {s['total']} 条（利好 {s['bull_count']} / 利空 {s['bear_count']} / 中性 {s['neutral_count']}）")
 
+    # 投资决策整合（估值/决策板块；失败仅跳过该板块，不影响金融数据与其他输出）
+    valuation_data = None
+    try:
+        from valuation import generate_valuation_data
+        valuation_data = generate_valuation_data(stock_code, company_data, impact_data)
+        vd = valuation_data or {}
+        dcf_ok = (vd.get("dcf") or {}).get("available", False)
+        rel_mode = (vd.get("relative") or {}).get("mode", "--")
+        act = (vd.get("matrix") or {}).get("actionLabel", "--")
+        print(f"  ✓ 估值决策整合: DCF {'有' if dcf_ok else '降级'} | 相对估值 {rel_mode} | 动作建议 {act}")
+    except Exception as e:  # noqa: BLE001
+        print(f"  ⚠ 估值决策整合失败（跳过该板块，不影响其余输出）: {repr(e)[:120]}")
+        valuation_data = None
+
     from format_report import generate_report
     from render_html import generate_report_html
-    report = generate_report(stock_code, company_data, policy_data, impact_data)
-    report_html = generate_report_html(stock_code, company_data, policy_data, impact_data)
+    report = generate_report(stock_code, company_data, policy_data, impact_data, valuation_data)
+    report_html = generate_report_html(stock_code, company_data, policy_data, impact_data, valuation_data)
 
     output_path = resolve_output_path(output_file)
     output_path.write_text(report, encoding="utf-8")
@@ -139,6 +153,7 @@ def run(stock_keyword: str, output_file: Optional[str] = None) -> str:
         "companyData": company_data,
         "policyData": policy_data,
         "impactData": impact_data,
+        "valuationData": valuation_data,
         "generatedAt": datetime.now().isoformat(),
     }, ensure_ascii=False, indent=2), encoding="utf-8")
 

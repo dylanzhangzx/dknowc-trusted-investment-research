@@ -225,6 +225,18 @@ def analyze_one(item: Dict[str, str], sid: str,
     else:
         time_window = tw
 
+    # 时效性标注：发布超 10 年的按"历史政策"提示，避免误导为当前有效利好
+    import re as _re2
+    from datetime import date as _date
+    year_m = _re2.search(r"((?:19|20)\d{2})", date_str or "")
+    if year_m:
+        try:
+            age = _date.today().year - int(year_m.group(1))
+            if age > 10:
+                time_window += f"；⚠ 历史政策（发布已 {age} 年），现行有效性待核验"
+        except ValueError:
+            pass
+
     # 影响方向细化
     direction = rule["direction_hint"]
     if any(kw in signal_text for kw in ["退坡", "减半", "取消", "废止", "移出", "收紧"]):

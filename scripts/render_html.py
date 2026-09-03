@@ -212,8 +212,9 @@ def _direction_class(direction: str) -> str:
 
 
 def render_impact_section(impact_data: Dict[str, Any],
-                          sources: List[Dict[str, str]]) -> str:
-    """渲染"六、政策影响分析"板块（HTML）"""
+                          sources: List[Dict[str, str]],
+                          no: str = "六") -> str:
+    """渲染"政策影响分析"板块（HTML）"""
     if not impact_data:
         return ""
     summary = impact_data.get("summary", {})
@@ -258,7 +259,7 @@ def render_impact_section(impact_data: Dict[str, Any],
 
     return (
         '<section class="section impact">'
-        '<h2><span class="no impact-no">六</span>政策影响分析 <span class="src-badge">投资视角 · 判断可溯源</span></h2>'
+        f'<h2><span class="no impact-no">{esc(no)}</span>政策影响分析 <span class="src-badge">投资视角 · 判断可溯源</span></h2>'
         '<p class="lead">把第四、五部分的检索结果翻译为投资判断：方向 / 传导链 / 影响变量 / 跟踪指标 / 投资含义。点击角标回溯原文。</p>'
         f'{signal_html}{overview}{items}'
         '<div class="impact-guide"><b>如何使用</b>'
@@ -269,9 +270,185 @@ def render_impact_section(impact_data: Dict[str, Any],
     )
 
 
+def _dnum(x) -> str:
+    try:
+        return f"{float(x):.2f}"
+    except (TypeError, ValueError):
+        return "--"
+
+
+def _dpct(x) -> str:
+    try:
+        return f"{float(x) * 100:.0f}%"
+    except (TypeError, ValueError):
+        return "--"
+
+
+def render_decision_section(valuation_data: Dict[str, Any],
+                            sources: List[Dict[str, str]],
+                            no: str = "七") -> str:
+    """渲染"投资决策整合"板块（HTML），强免责、弹性降级。"""
+    basic = valuation_data.get("basic", {})
+    dcf = valuation_data.get("dcf", {})
+    relative = valuation_data.get("relative", {})
+    bands = valuation_data.get("bands", {})
+    matrix = valuation_data.get("matrix", {})
+    disclaim = valuation_data.get("disclaimer", "")
+
+    f1 = cite("F1", sources)  # F1 来源角标（金融数据）
+    price = basic.get("price")
+    price_txt = f"{_dnum(price)} 元" if price is not None else "--"
+
+    # --- 估值基础卡 ---
+    src_note = basic.get("sourceNote") or "公开披露数据（akshare）"
+    basic_row = (
+        '<div class="dv-basic">'
+        f'<span>现价 <b>{esc(price_txt)}</b></span>'
+        f'<span>总市值 <b>{esc(basic.get("marketCap")) if basic.get("marketCap") is not None else "--"} 亿</b></span>'
+        f'<span>PE(TTM) <b>{esc(str(basic.get("peTtm"))) if basic.get("peTtm") is not None else "--"}</b></span>'
+        f'<span>PB <b>{esc(str(basic.get("pb"))) if basic.get("pb") is not None else "--"}</b></span>'
+        f'<span class="dv-src">来源 {esc(src_note)} {f1}</span>'
+        '</div>'
+    )
+
+    # --- DCF 三情景 ---
+    if dcf.get("available"):
+        scen = dcf.get("scenarios", {})
+        rows = ""
+        for key in ("pessimistic", "neutral", "optimistic"):
+            s = scen.get(key) or {}
+            up = s.get("upsidePct")
+            up_cls = "pos" if (up is not None and up > 0) else "neg" if (up is not None and up < 0) else ""
+            up_txt = f"{up:+.1f}%" if up is not None else "--"
+            cls = "row-neutral" if key == "neutral" else ""
+            rows += (
+                f'<tr class="{cls}"><td>{esc(s.get("label",""))}</td>'
+                f'<td>{_dpct(s.get("growth"))}</td>'
+                f'<td><b>{_dnum(s.get("intrinsicPs"))}</b></td>'
+                f'<td class="{up_cls}">{up_txt}</td></tr>'
+            )
+        asm = "".join(f'<li>{esc(a)}</li>' for a in dcf.get("assumptions", []))
+        pa = dcf.get("policyAdj", {})
+        applic = (f'<div class="dv-applic">{esc(dcf["applicabilityNote"])}</div>'
+                  if dcf.get("applicabilityNote") else "")
+        dcf_html = (
+            '<div class="dv-block">'
+            '<h4>DCF 内在价值（三情景）<span class="src-badge">现金流折现 · 研究假设</span></h4>'
+            '<table class="dv-table"><thead><tr><th>情景</th><th>增速假设</th>'
+            f'<th>内在价值(元/股){f1}</th><th>较现价</th></tr></thead><tbody>{rows}</tbody></table>'
+            f'{applic}'
+            '<details class="dv-details"><summary>假设与依据（参数化，可复核）</summary>'
+            f'<ul>{asm}</ul>'
+            f'<p class="dv-pa">政策衔接：{esc(pa.get("note",""))} '
+            f'（利好 {pa.get("bullCount",0)} / 利空 {pa.get("bearCount",0)}）</p>'
+            '</details></div>'
+        )
+    else:
+        dcf_html = (
+            '<div class="dv-block dv-degraded"><h4>DCF 内在价值</h4>'
+            '<p>本次缺可用自由现金流（FCF）或股本口径，或处重资产扩张期（FCF 为负），'
+            'DCF 不输出量化内在价值（不硬算、不编造），请以下方相对估值与决策矩阵为准。</p>'
+            '</div>'
+        )
+
+    # --- 相对估值 ---
+    cur = relative.get("current", {})
+    rel_lines = f'<div class="dv-block"><h4>相对估值<span class="src-badge">弹性降级</span></h4>'
+    rel_lines += (f'<p class="dv-cur">当前 PE(TTM) <b>'
+                  f'{esc(str(cur.get("peTtm"))) if cur.get("peTtm") is not None else "--"}</b> · PB <b>'
+                  f'{esc(str(cur.get("pb"))) if cur.get("pb") is not None else "--"}</b> {f1}</p>')
+    mode = relative.get("mode")
+    if mode == "percentile":
+        pl = relative.get("percentile") or {}
+        pe_p, pb_p = (pl.get("pe") or {}), (pl.get("pb") or {})
+        pe_txt = (f'{esc(str(pe_p.get("current")))}，历史分位 <b>{_dpct(pe_p.get("pct"))}</b>（{esc(pe_p.get("label",""))}）'
+                  if pe_p.get("pct") is not None else "--")
+        pb_txt = (f'{esc(str(pb_p.get("current")))}，历史分位 <b>{_dpct(pb_p.get("pct"))}</b>（{esc(pb_p.get("label",""))}）'
+                  if pb_p.get("pct") is not None else "--")
+        rel_lines += (f'<div class="dv-pair"><span>PE 分位：{pe_txt}</span>'
+                      f'<span>PB 分位：{pb_txt}</span></div>')
+        rel_lines += f'<p class="dv-note">{esc(relative.get("comment",""))}</p>'
+    elif mode == "peer_median":
+        pm = relative.get("peerMedian") or {}
+        rel_lines += (f'<div class="dv-pair"><span>同业中位 PE '
+                      f'{esc(str(pm.get("peerMedianPe"))) if pm.get("peerMedianPe") is not None else "--"} · PB '
+                      f'{esc(str(pm.get("peerMedianPb"))) if pm.get("peerMedianPb") is not None else "--"}'
+                      f'（{esc(pm.get("industryName","同业"))}，样本 {esc(str(pm.get("sampleN","--")))} 家）</span></div>')
+        rel_lines += f'<p class="dv-note">{esc(pm.get("note",""))}</p>'
+    else:
+        rel_lines += f'<p class="dv-note">{esc(relative.get("comment",""))}</p>'
+    rel_lines += '</div>'
+
+    # --- 目标价区间 ---
+    band_html = '<div class="dv-block"><h4>估值区间与安全边际<span class="src-badge">模型假设 · 非买卖点位</span></h4>'
+    if bands.get("intrinsicCenter"):
+        center = bands["intrinsicCenter"]
+        bb = bands.get("buyBelow")
+        sa = bands.get("sellAbove")
+        hold = bands.get("hold") or []
+        band_html += (
+            f'<div class="band-row">'
+            f'<span class="band-seg band-buy">买入关注区 ≤ {_dnum(bb)}</span>'
+            f'<span class="band-seg band-hold">持有观察区 '
+            f'{_dnum(hold[0]) if len(hold)>0 and hold[0] is not None else "--"}~{_dnum(hold[1]) if len(hold)>1 and hold[1] is not None else "--"}</span>'
+            f'<span class="band-seg band-sell">卖出/高估观察区 ≥ {_dnum(sa)}</span>'
+            '</div>'
+            f'<p class="dv-center">中性内在价值 {_dnum(center)} 元/股 {f1}</p>'
+        )
+        band_html += f'<p class="dv-note">{esc(bands.get("basedOn",""))}</p>'
+    else:
+        band_html += f'<p class="dv-degraded">{esc(bands.get("basedOn",""))}</p>'
+        if bands.get("note"):
+            band_html += f'<p class="dv-note">{esc(bands.get("note"))}</p>'
+    band_html += '</div>'
+
+    # --- 决策矩阵 ---
+    dim_rows = ""
+    for d in matrix.get("dimensions", []):
+        ev = "；".join(d.get("evidence", [])) or "--"
+        w = d.get("weight")
+        w_txt = f"{w*100:.0f}%" if w is not None else "--"
+        dim_rows += (f'<tr><td>{esc(d.get("label",""))}</td><td>{w_txt}</td>'
+                     f'<td>{esc(d.get("tone",""))}（{esc(str(d.get("score","--")))}/3）</td>'
+                     f'<td>{esc(ev)}</td></tr>')
+    mat_score = matrix.get("score")
+    score_txt = f"{mat_score*100:.0f}/100" if mat_score is not None else "--"
+    action = matrix.get("actionLabel", "--")
+    action_cls = {"买入关注": "act-buy", "持有观望": "act-hold", "回避": "act-avoid"}.get(action, "")
+    pol_note = ('<p class="dv-policy-note">注：未开通深知检索，本次决策未纳入政策/标准维度，退化为财务质量 + 估值维度。</p>'
+                if matrix.get("policyWeightZero") else "")
+    matrix_html = (
+        '<div class="dv-block">'
+        '<h4>决策矩阵<span class="src-badge">规则模型 · 研究参考</span></h4>'
+        f'<table class="dv-table matrix-table"><thead><tr><th>维度</th><th>权重</th><th>打分</th>'
+        f'<th>依据</th></tr></thead><tbody>{dim_rows}</tbody></table>'
+        f'{pol_note}'
+        f'<div class="dv-score">综合得分 <b>{score_txt}</b></div>'
+        f'<div class="matrix-action {action_cls}">动作建议（研究参考）：{esc(action)}</div>'
+        f'<p class="dv-note">{esc(matrix.get("actionNote",""))}</p>'
+        f'<p class="dv-note">{esc(matrix.get("rulesNote",""))}</p>'
+        '</div>'
+    )
+
+    # 免责
+    disc_html = f'<div class="disc-box"><b>⚠️ 免责声明</b><p>{esc(disclaim)}</p></div>'
+
+    return (
+        '<section class="section decision">'
+        f'<h2><span class="no decision-no">{esc(no)}</span>投资决策整合 '
+        '<span class="src-badge decision-badge">估值区间 · 研究参考 · 非投资建议</span></h2>'
+        '<p class="lead">把财务基本面与政策影响收敛为一个研究性结论：DCF 内在价值三情景 + 相对估值 + '
+        '目标价区间 + 决策矩阵。所有区间/动作均为规则模型生成，非投资建议，据此操作风险自担。</p>'
+        f'{basic_row}{dcf_html}{rel_lines}{band_html}{matrix_html}{disc_html}'
+        '</section>'
+    )
+
+
 # ============================================================
 # 右栏来源面板
 # ============================================================
+
+_CN_NO = ["", "一", "二", "三", "四", "五", "六", "七", "八"]
 
 TYPE_LABELS = {"policy": "政策", "standard": "标准", "finance": "金融数据"}
 
@@ -308,6 +485,7 @@ def generate_report_html(stock_code: str,
                          company_data: Dict[str, Any],
                          policy_data: Dict[str, Any],
                          impact_data: Optional[Dict[str, Any]] = None,
+                         valuation_data: Optional[Dict[str, Any]] = None,
                          generated_at: Optional[datetime] = None) -> str:
     generated_at = generated_at or datetime.now()
     basic = company_data.get("basicInfo") or {}
@@ -326,7 +504,15 @@ def generate_report_html(stock_code: str,
 
     pol_count = len(policy_data.get("policyHighlights", []))
     std_count = len(policy_data.get("standardHighlights", []))
-    impact_html = render_impact_section(impact_data, sources) if impact_data else ""
+    next_no = 6
+    impact_html = ""
+    if impact_data:
+        impact_html = render_impact_section(impact_data, sources, _CN_NO[next_no])
+        next_no += 1
+    decision_html = ""
+    if valuation_data:
+        decision_html = render_decision_section(valuation_data, sources, _CN_NO[next_no])
+        next_no += 1
 
     html_doc = f"""<!doctype html>
 <html lang="zh-CN">
@@ -466,13 +652,109 @@ a{{color:var(--brand)}}
   .layout{{grid-template-columns:1fr}}
   .sources{{position:static;max-height:none}}
 }}
+/* —— 移动端专项适配（手机阅读投研报告，方案对齐深知公文写作） —— */
+.mobile-nav{{display:none}}
+.sheet-mask{{display:none}}
+.sheet{{display:none}}
+@media (max-width:680px){{
+  body{{font-size:14px;line-height:1.8}}
+  .layout{{grid-template-columns:1fr;padding:12px 10px 40px;gap:14px}}
+  .topbar{{padding:8px 12px;font-size:12px;gap:4px;flex-wrap:wrap}}
+  .topbar .tags span{{font-size:10.5px;padding:1px 8px;margin-left:4px}}
+  .r-head{{padding:16px 14px;border-radius:10px}}
+  .r-head h1{{font-size:18px}}
+  .r-head .sub{{font-size:11.5px;line-height:1.6}}
+  .section{{padding:16px 14px;border-radius:10px}}
+  .section h2{{font-size:15.5px;flex-wrap:wrap}}
+  .section h2 .no{{width:22px;height:22px;font-size:12px}}
+  .src-badge{{font-size:10.5px;padding:2px 8px}}
+  .data-table,.kv-table,.dv-table{{font-size:12px}}
+  .data-table th,.data-table td,.kv-table th,.kv-table td,.dv-table th,.dv-table td{{padding:6px 7px;line-height:1.55}}
+  .data-table,.dv-table{{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;white-space:nowrap}}
+  .dv-basic{{padding:9px 11px;gap:6px 12px;font-size:12px}}
+  .band-row{{flex-direction:column}}
+  .band-seg{{min-width:0}}
+  .impact-overview span{{font-size:11px;padding:2px 10px}}
+  .ia-card summary{{flex-wrap:wrap;gap:4px 8px}}
+  .ia-card .ia-title{{font-size:13px;line-height:1.5}}
+  .ia-row{{flex-direction:column;gap:2px}}
+  .ia-row .ia-k{{min-width:0}}
+  .disc-box{{font-size:11.5px;padding:9px 11px}}
+  .matrix-action{{font-size:13px}}
+  .sources{{padding:12px;border-radius:10px}}
+  .source-card{{padding:10px 11px}}
+  .sc-excerpt{{font-size:11.5px}}
+  .mobile-nav{{display:block;margin:0 0 14px;padding:11px 14px;border:1.5px solid var(--brand);
+    border-radius:10px;background:var(--brand-soft);color:var(--brand);font-weight:800;
+    font-size:13.5px;text-decoration:none;text-align:center}}
+  /* 移动端来源底部弹层：点角标就地弹出来源卡，不打断阅读 */
+  .sheet-mask{{display:block;position:fixed;inset:0;background:rgba(11,31,58,.45);z-index:99;opacity:0;
+    pointer-events:none;transition:opacity .2s}}
+  .sheet-mask.show{{opacity:1;pointer-events:auto}}
+  .sheet{{display:block;position:fixed;left:0;right:0;bottom:0;z-index:100;background:#fff;
+    border-radius:14px 14px 0 0;box-shadow:0 -8px 30px rgba(11,31,58,.25);
+    max-height:68vh;overflow-y:auto;-webkit-overflow-scrolling:touch;
+    padding:10px 16px 22px;transform:translateY(105%);transition:transform .25s ease}}
+  .sheet.show{{transform:translateY(0)}}
+  .sheet-grab{{width:38px;height:4px;border-radius:2px;background:#c9d4e2;margin:2px auto 8px}}
+  .sheet-head{{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}}
+  .sheet-head b{{font-size:13.5px;color:var(--navy)}}
+  .sheet-close{{border:1px solid var(--line);background:#f5f8fc;border-radius:8px;color:#3b4a61;
+    font-size:12.5px;font-weight:700;padding:5px 14px;cursor:pointer}}
+  .sheet .source-card{{box-shadow:none;margin-bottom:0}}
+  .sheet .sc-excerpt{{display:block;-webkit-line-clamp:unset;cursor:auto}}
+}}
 @media print{{
-  .topbar,.filters,.src-search{{display:none!important}}
+  .topbar,.filters,.src-search,.mobile-nav,.sheet,.sheet-mask{{display:none!important}}
   .layout{{grid-template-columns:1fr;max-width:none;padding:0}}
   .sources{{position:static;max-height:none;border:0}}
   .sc-excerpt{{display:block}}
   body{{background:#fff}}
+  .section,.r-head{{break-inside:avoid;box-shadow:none}}
+  .source-card{{break-inside:avoid}}
 }}
+
+/* ===== 投资决策整合板块 ===== */
+.decision .decision-no{{background:var(--warn)!important}}
+.decision-badge{{background:#fff4e0;color:var(--std)}}
+.dv-block{{margin:14px 0;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:#fff}}
+.dv-block h4{{margin:0 0 10px;font-size:14px;color:var(--navy);display:flex;align-items:center;gap:8px;flex-wrap:wrap}}
+.dv-basic{{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;padding:10px 14px;
+  background:var(--brand-soft);border-radius:10px;margin:12px 0;font-size:13px}}
+.dv-basic b{{color:var(--navy);font-weight:700}}
+.dv-src{{color:var(--muted);font-size:11.5px}}
+.dv-table{{width:100%;border-collapse:collapse;font-size:13px;margin:6px 0}}
+.dv-table th,.dv-table td{{border:1px solid var(--line);padding:6px 10px;text-align:left}}
+.dv-table th{{background:#f6f8fb;color:var(--muted);font-weight:600;white-space:nowrap}}
+.dv-table tr.row-neutral{{background:var(--brand-soft)}}
+.dv-table .pos{{color:var(--policy);font-weight:700}}
+.dv-table .neg{{color:var(--warn);font-weight:700}}
+.dv-details{{font-size:12.5px;color:var(--muted);margin-top:6px}}
+.dv-details ul{{margin:6px 0 6px 18px;padding:0}}
+.dv-pa{{margin:6px 0 0;color:var(--navy);font-size:12.5px}}
+.dv-degraded{{color:var(--warn);font-size:12.5px}}
+.dv-applic{{margin:8px 0;padding:8px 11px;border:1px solid var(--warn);border-radius:8px;
+  background:#fdf0f0;color:var(--warn);font-size:12.5px;line-height:1.6}}
+.dv-cur{{font-size:13.5px;margin:4px 0}}
+.dv-pair{{display:flex;flex-wrap:wrap;gap:6px 22px;font-size:13px;margin:8px 0}}
+.dv-note{{color:var(--muted);font-size:12px;margin:6px 0 0}}
+.band-row{{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}}
+.band-seg{{flex:1;min-width:150px;border-radius:9px;padding:8px 12px;text-align:center;
+  font-size:13px;font-weight:700;color:#fff}}
+.band-buy{{background:#0c9b78}}
+.band-hold{{background:#b26a00}}
+.band-sell{{background:#b93939}}
+.dv-center{{font-size:13px;color:var(--navy);margin:6px 0}}
+.matrix-table td:last-child{{font-size:12px;color:var(--muted)}}
+.dv-score{{font-size:15px;font-weight:700;color:var(--navy);margin:10px 0 6px}}
+.matrix-action{{display:inline-block;border-radius:999px;padding:6px 16px;font-weight:700;color:#fff;margin:4px 0}}
+.matrix-action.act-buy{{background:#0c9b78}}
+.matrix-action.act-hold{{background:#b26a00}}
+.matrix-action.act-avoid{{background:#b93939}}
+.dv-policy-note{{color:var(--std);font-size:12px;margin:6px 0}}
+.disc-box{{margin-top:10px;padding:10px 13px;border:1px solid var(--line);border-radius:9px;
+  background:#fff8ec;font-size:12px;color:#7a5b00;line-height:1.6}}
+.disc-box b{{display:block;margin-bottom:4px}}
 </style>
 </head>
 <body>
@@ -489,6 +771,8 @@ a{{color:var(--brand)}}
       <div class="sub">所属行业：{esc(industry)} · 检索地域：{esc(policy_data.get('serviceArea', '--'))} · 政策时间口径：{esc(policy_data.get('effTime', '--'))}</div>
       <div class="sub">点击正文角标 [P1]/[S1]/[F1] 可在右侧来源面板定位对应材料原文。</div>
     </div>
+
+    <a class="mobile-nav" href="#sources-panel">查看来源材料（{len(sources)} 条 · 点击角标可就地弹出原文）↓</a>
 
     <section class="section">
       <h2><span class="no">一</span>公司概况 {finance_badge}</h2>
@@ -522,6 +806,8 @@ a{{color:var(--brand)}}
 
     {impact_html}
 
+    {decision_html}
+
     <div class="risk"><b>风险提示</b>
       本报告基于公开披露数据与深知可信检索结果整理生成，仅供信息查询与研究参考，不构成任何投资建议、证券推荐或收益承诺。
       金融数据以上市公司正式公告为准，政策与标准内容来自深知可信搜索检索，现行有效性以官方发布原文为准。
@@ -531,7 +817,7 @@ a{{color:var(--brand)}}
     <div class="foot">深知可信投研 · dknowc-trusted-investment-research · 公开披露金融数据 + 深知政策标准洞察</div>
   </main>
 
-  <aside class="sources" aria-label="来源面板">
+  <aside class="sources" id="sources-panel" aria-label="来源面板">
     <h3>来源材料（{len(sources)}）</h3>
     <div class="count">P=政策 · S=标准 · F=金融数据 · 点击正文角标定位</div>
     <div class="filters" role="group" aria-label="来源筛选">
@@ -543,6 +829,13 @@ a{{color:var(--brand)}}
     <input class="src-search" type="search" placeholder="搜索标题 / 机构 / 摘录…" aria-label="搜索来源">
     <div class="src-list">{render_source_cards(sources)}</div>
   </aside>
+</div>
+
+<div class="sheet-mask" aria-hidden="true"></div>
+<div class="sheet" role="dialog" aria-label="来源材料">
+  <div class="sheet-grab"></div>
+  <div class="sheet-head"><b>来源材料</b><button class="sheet-close" type="button">收起</button></div>
+  <div class="sheet-body"></div>
 </div>
 
 <script>
@@ -558,13 +851,51 @@ a{{color:var(--brand)}}
   }});
   if (dup.length && console.warn) {{ console.warn("[sources] duplicate ids:", dup); }}
 
-  /* 角标 → 来源卡：精确 ID 匹配，缺失即提示，绝不按位置猜测 */
+  /* 移动端底部弹层：点角标就地展示来源卡，不打断正文阅读 */
+  var sheet = document.querySelector(".sheet");
+  var mask = document.querySelector(".sheet-mask");
+  function isMobile() {{
+    return window.matchMedia("(max-width:680px)").matches;
+  }}
+  function openSheet(card) {{
+    if (!sheet) return;
+    var body = sheet.querySelector(".sheet-body");
+    var clone = card.cloneNode(true);
+    clone.removeAttribute("id");
+    clone.classList.remove("hide");
+    clone.classList.add("open");
+    body.innerHTML = "";
+    body.appendChild(clone);
+    sheet.classList.add("show");
+    mask.classList.add("show");
+    document.body.style.overflow = "hidden";
+    sheet.scrollTop = 0;
+  }}
+  function closeSheet() {{
+    if (!sheet) return;
+    sheet.classList.remove("show");
+    mask.classList.remove("show");
+    document.body.style.overflow = "";
+  }}
+  if (sheet && mask) {{
+    mask.addEventListener("click", closeSheet);
+    var closeBtn = sheet.querySelector(".sheet-close");
+    if (closeBtn) closeBtn.addEventListener("click", closeSheet);
+  }}
+
+  /* 角标 → 来源卡：精确 ID 匹配，缺失即提示，绝不按位置猜测。
+     手机单栏下不滚动定位（会跳到页面底部打断阅读），改为底部弹层就地查看。 */
   document.querySelectorAll("[data-cite]").forEach(function (btn) {{
+    if (btn.classList.contains("sheet-close")) return;
     btn.addEventListener("click", function () {{
       var card = byId[btn.getAttribute("data-cite")];
       if (!card) {{
         btn.classList.add("unresolved");
         if (console.error) {{ console.error("[cite] unresolved:", btn.getAttribute("data-cite")); }}
+        return;
+      }}
+      if (isMobile()) {{
+        openSheet(card);
         return;
       }}
       card.classList.remove("hide");
@@ -623,7 +954,8 @@ if __name__ == "__main__":
         payload["stockCode"],
         payload["companyData"],
         payload["policyData"],
-        impact_data=payload.get("impactData"),  # 旧快照无此字段时自动跳过该板块
+        impact_data=payload.get("impactData"),      # 旧快照无此字段时自动跳过该板块
+        valuation_data=payload.get("valuationData"),  # 旧快照无此字段时自动跳过该板块
     )
     Path(args.output).write_text(doc, encoding="utf-8")
     print(f"HTML 已生成: {args.output}")
