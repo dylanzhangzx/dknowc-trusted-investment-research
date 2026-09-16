@@ -7,7 +7,7 @@ description: "当用户需要上市公司研究、公司基本面分析、财报
 description_zh: "深知可信投研是由北京彩智科技有限公司旗下“深知可信智能”提供的上市公司可信研究 Skill。它将开源公开披露的金融数据（公司资料、财务指标、现金流、行业定位、历史估值）与深知可信检索的政策、法规、标准原文结合，输出含政策影响分析（利好/利空方向、传导链、跟踪指标、投资含义）与投资决策整合（DCF 内在价值三情景、相对估值、目标价区间、决策矩阵）的可溯源投研报告（研究参考、非投资建议），适用于公司研究、行业分析、政策影响归因、估值参考与风险排查场景。"
 description_en: "dknowc trusted investment research is a listed-company research Skill provided by dknowc Trusted Intelligence under Beijing Caizhi Technology Co., Ltd. It combines open public financial data (company profile, key indicators, cash flow, industry position, historical valuation) with dknowc trusted retrieval of policy, regulation and standard documents, and delivers provenance-enabled research reports with policy impact analysis (direction, transmission chain, tracking metrics, investment implications) and an investment decision integration layer (DCF intrinsic value scenarios, relative valuation, target price bands, decision matrix) for research reference only — not investment advice."
 category: 金融投研
-version: 1.1.0
+version: 1.2.0
 author: 彩智科技
 permissions:
   network:
@@ -99,8 +99,8 @@ python3 scripts/run_research.py "比亚迪" 比亚迪_报告.md
 | 文件 | 说明 |
 |------|------|
 | `比亚迪_报告.md` | Markdown 报告（可版本管理） |
-| `比亚迪_报告.html` | **可溯源 HTML**：左栏报告 + 右栏来源面板，角标点击定位，政策/标准带官方原文链接 |
-| `比亚迪_报告.data.json` | 数据快照，可用 `render_html.py` 免调接口复渲 |
+| `比亚迪_报告.html` | **可溯源 HTML（投研核验报告）**：单栏连续文档流；政策/标准/影响分析条目句后行内引文胶囊，点击原地展开溯源卡（原文摘录 + 查看全文）；材料专库独立视图（检索分组 tabs、搜索、热词、未引用筛选）；核验报告单 + 过程回顾（数字真实计算）；顶栏支持只看正文 / 复制全文 / 打印归档（含核验材料附录） |
+| `比亚迪_报告.data.json` | 数据快照，可用 `render_html.py` 免调接口复渲（离线复渲加 `--no-link-check`） |
 
 ### 流程六步
 
